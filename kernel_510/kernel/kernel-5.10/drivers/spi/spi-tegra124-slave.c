@@ -2012,8 +2012,10 @@ static int tegra_spi_probe(struct platform_device *pdev)
 	if (pdata->rx_trig_words != 0 &&
 		 pdata->rx_trig_words != 4 && pdata->rx_trig_words != 8)
 		pdata->rx_trig_words = 0;
-
-	controller = devm_spi_alloc_master(&pdev->dev, sizeof(*tspi));
+	if (of_property_read_bool(pdev->dev.of_node, "spi-slave"))
+		controller = devm_spi_alloc_slave(&pdev->dev, sizeof(*tspi));
+	else
+		controller = devm_spi_alloc_master(&pdev->dev, sizeof(*tspi));
 	if (!controller) {
 		dev_err(&pdev->dev, "controller allocation failed\n");
 		return -ENOMEM;

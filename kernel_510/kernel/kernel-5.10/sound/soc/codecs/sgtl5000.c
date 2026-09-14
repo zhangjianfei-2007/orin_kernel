@@ -480,19 +480,7 @@ static const struct snd_soc_dapm_route sgtl5000_dapm_routes[] = {
 	{"ADC", NULL, "Capture Mux"},		/* adc_mux --> adc */
 	{"AIFOUT", NULL, "ADC"},		/* adc --> i2s_out */
 
-	{"DAP Mux", "ADC", "ADC"},		/* adc --> DAP mux */
-	{"DAP Mux", NULL, "AIFIN"},		/* i2s --> DAP mux */
-	{"DAP", NULL, "DAP Mux"},		/* DAP mux --> dap */
-
-	{"DAP MIX Mux", "ADC", "ADC"},		/* adc --> DAP MIX mux */
-	{"DAP MIX Mux", NULL, "AIFIN"},		/* i2s --> DAP MIX mux */
-	{"DAP", NULL, "DAP MIX Mux"},		/* DAP MIX mux --> dap */
-
-	{"Digital Input Mux", "ADC", "ADC"},	/* adc --> audio mux */
-	{"Digital Input Mux", NULL, "AIFIN"},	/* i2s --> audio mux */
-	{"Digital Input Mux", NULL, "DAP"},	/* dap --> audio mux */
-	{"DAC", NULL, "Digital Input Mux"},	/* audio mux --> dac */
-
+	{"DAC", NULL, "AIFIN"},			/* i2s-->dac,skip audio mux */
 	{"Headphone Mux", "DAC", "DAC"},	/* dac --> hp_mux */
 	{"LO", NULL, "DAC"},			/* dac --> line_out */
 

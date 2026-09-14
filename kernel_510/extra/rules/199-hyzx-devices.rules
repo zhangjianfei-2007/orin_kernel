@@ -1,0 +1,6 @@
+# camera, switch and etc.
+#KERNEL=="camera" OWNER="root" GROUP="gpio" MODE="0660"
+KERNEL=="switch" OWNER="root" GROUP="gpio" MODE="0660"
+
+# /dev/ttyTHS*
+KERNEL=="ttyTHS*" OWNER="root" GROUP="gpio" MODE="0666"

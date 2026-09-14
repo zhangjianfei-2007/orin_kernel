@@ -1,0 +1,37 @@
+#!/bin/bash
+# This script runs on target post installation of kernel debian package.
+
+if [ "${1}" != configure ]; then
+	exit 0
+fi
+
+#depmod -a 4.9.140
+
+if [ -d /lib/modprobe.d/ ]; then
+	cat - > "/lib/modprobe.d/nocamdrv.conf" <<EOF
+#un-comment to disable camera related drivers
+#blacklist max9296
+#blacklist max9295
+#blacklist imx390
+#blacklist ap0202
+#blacklist gw5200
+#blacklist max2008X
+#blacklist max96705
+#blacklist ox01f10
+#blacklist camera
+EOF
+
+fi
+
+cat - > "/etc/modules" <<EOF
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with "#" are ignored.
+spidev
+spi-slave-time
+camera
+#switch
+EOF
+
+#exit 0

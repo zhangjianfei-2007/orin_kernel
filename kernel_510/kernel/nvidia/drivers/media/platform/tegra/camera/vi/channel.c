@@ -2460,6 +2460,16 @@ int tegra_channel_init_video(struct tegra_channel *chan)
 	chan->video->ctrl_handler = &chan->ctrl_handler;
 	chan->video->lock = &chan->video_lock;
 
+	/* Validate that the name fits */
+	if (ARRAY_SIZE(chan->video->name) >= ARRAY_SIZE(chan->devnode_name)) {
+		strncpy(chan->video->name, chan->devnode_name, ARRAY_SIZE(
+				chan->devnode_name));
+	} else {
+		ret = -ENOMEM;
+		dev_err(&chan->video->dev, "Not enough space for channel video name");
+		goto ctrl_init_error;
+	}
+
 	video_set_drvdata(chan->video, chan);
 
 	return ret;

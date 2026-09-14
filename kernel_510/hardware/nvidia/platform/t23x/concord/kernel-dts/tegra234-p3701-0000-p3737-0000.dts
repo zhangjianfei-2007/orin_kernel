@@ -19,7 +19,19 @@
 #include "tegra234-power-tree-p3701-0000-p3737-0000.dtsi"
 #include "tegra234-dcb-p3701-0000-a02-p3737-0000-a01.dtsi"
 #include <tegra234-soc/mods-simple-bus.dtsi>
-#include "cvb/tegra234-p3737-camera-modules.dtsi"
+/*#include "cvb/tegra234-p3737-camera-modules.dtsi"*/
+
+//#include "cvb/tegra234-hy017c-0000-camera-gw5200-imx390.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-gw5200-imx390-fsync.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-gw5200-imx390-3G.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-ox01f10.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-ap0202-ar0231.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-gw5300-ar0820.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-gw5300-ar0820-fsync.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-gw5300-ox08bc.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-gw5300-f008ax.dtsi"
+//#include "cvb/tegra234-hy017c-0000-camera-ox03c10-HK.dtsi"
+#include "cvb/tegra234-hy017c-0000-camera-hy030.dtsi"
 
 #include <t234-common-cvm/tegra234-cpuidle.dtsi>
 #include <t234-common-cvm/tegra234-thermal.dtsi>

@@ -1,0 +1,382 @@
+/*
+ * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include <t234-common-modules/tegra234-hy029-0000-camera-gw5300-ar0820.dtsi>
+#include "dt-bindings/clock/tegra234-clock.h"
+
+#define CAMERA_I2C_MUX_BUS(x) (0x1E + x)
+
+/* camera control gpio definitions */
+
+/ {
+
+	/* set camera gpio direction to output */
+	gpio@2200000 {
+		camera-control-output-low {
+			gpio-hog;
+			output-low;
+			gpios = <CAM0_RST_L 0 CAM1_RST_L 0
+				 CAM2_RST_L 0 CAM3_RST_L 0>;
+
+			label = "cam0-rst", "cam1-rst",
+				"cam2-rst", "cam3-rst";
+		};
+	};
+
+	i2c@3180000 {
+		clock-frequency = <400000>;
+	
+        CamPOC12V_a: max2008X@00{
+            compatible = "HYZX,max20087";
+            reg = <0x28>;
+            out-ports = <4>;
+            out-boot-on = <1 1 1 1>;
+            power-on-delay = <250>;
+            status = "okay";
+        };
+        CamPOC12V_b: max2008X@01{
+            compatible = "HYZX,max20087";
+            reg = <0x29>;
+            out-ports = <4>;
+            out-boot-on = <1 1 1 1>;
+            power-on-delay = <250>;
+            status = "okay";
+        };
+
+		/* max96712 A: 0x6b */
+		dser_a: max96712_a@6b{
+			compatible = "nvidia,max96712";
+			reg = <0x6b>;
+			/* MIPI PHY 2x4 mode: MIPI output configured as two ports with four data lanes each.*/
+	 		/* PHY0 and PHY1 combined, and PHY2 and PHY3 combined. CPHY and DPHY are the same.*/
+			/* CPHY: two of the 2-trio PHYs are combined as 4-trio */
+			csi-mode = "2x4";
+			max-src = <4>;
+			dser-num = <0>;
+			mipi-clk = <2400>;  /* mipi-clk: MHz */
+			gmsl-mode = "gmsl-2";  /* Example: "gmsl-1", "gmsl-2", "gmsl-2-3G" */
+			reset-gpios = <&tegra_main_gpio CAM0_RST_L GPIO_ACTIVE_HIGH>;
+		};
+
+		/* max96712 B: 0x2a */
+		dser_b: max96712_b@2a{
+			compatible = "nvidia,max96712";
+			reg = <0x2a>;
+			csi-mode = "2x4";
+			max-src = <4>;
+			dser-num = <1>;
+			mipi-clk = <2400>;  /* mipi-clk: MHz */
+			gmsl-mode = "gmsl-2";  /* Example: "gmsl-1", "gmsl-2", "gmsl-2-3G" */
+			reset-gpios = <&tegra_main_gpio CAM1_RST_L GPIO_ACTIVE_HIGH>;
+		};
+
+		ser_prim_a: max9295_prim@40 {
+			compatible = "nvidia,max9295";
+			reg = <0x40>;
+			group=<0>;
+			is-prim-ser;
+		};
+		ser_a: max9295_a@11 {
+			compatible = "nvidia,max9295";
+			reg = <0x11>;
+			group=<0>;
+			dser-num = <0>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+		};
+		ser_b: max9295_b@12 {
+			compatible = "nvidia,max9295";
+			reg = <0x12>;
+			group=<0>;
+			dser-num = <0>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+		};
+		ser_c: max9295_c@13 {
+			compatible = "nvidia,max9295";
+			reg = <0x13>;
+			group=<0>;
+			dser-num = <0>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+		};
+		ser_d: max9295_d@14 {
+			compatible = "nvidia,max9295";
+			reg = <0x14>;
+			group=<0>;
+			dser-num = <0>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+		};
+		#if 1
+		ser_e: max9295_e@15 {
+			compatible = "nvidia,max9295";
+			reg = <0x15>;
+			group=<0>;
+			dser-num = <1>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+		};
+		ser_f: max9295_f@16 {
+			compatible = "nvidia,max9295";
+			reg = <0x16>;
+			group=<0>;
+			dser-num = <1>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+		};
+		ser_g: max9295_g@17 {
+			compatible = "nvidia,max9295";
+			reg = <0x17>;
+			group=<0>;
+			dser-num = <1>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+		};
+		ser_h: max9295_h@18 {
+			compatible = "nvidia,max9295";
+			reg = <0x18>;
+			group=<0>;
+			dser-num = <1>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+		};
+		#endif
+		gw5300_a@1b {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <0>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_a>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_b@1c {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <0>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_b>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_c@1d {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <0>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_c>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_d@1e {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <0>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_d>;
+			nvidia,gmsl-dser-device = <&dser_a>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		#if 1
+		gw5300_e@1f {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <1>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_e>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_f@20 {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <1>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_f>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_g@21 {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <1>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_g>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_h@22 {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <1>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_h>;
+			nvidia,gmsl-dser-device = <&dser_b>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		#endif
+	};
+	
+	i2c@c250000 {
+        CamPOC12V_c: max2008X@02{
+            compatible = "HYZX,max20087";
+            reg = <0x28>;
+            out-ports = <4>;
+            out-boot-on = <1 1 1 1>;
+            power-on-delay = <250>;
+            status = "okay";
+        };
+        
+		/* max96712 C: 0x6b */
+		dser_c: max96712_c@6b{
+			compatible = "nvidia,max96712";
+			reg = <0x6b>;
+			csi-mode = "2x4";
+			max-src = <4>;
+			dser-num = <2>;
+			mipi-clk = <2400>;  /* mipi-clk: MHz */
+			gmsl-mode = "gmsl-2";  /* Example: "gmsl-1", "gmsl-2", "gmsl-2-3G" */
+			reset-gpios = <&tegra_main_gpio CAM2_RST_L GPIO_ACTIVE_HIGH>;
+		};
+
+		ser_prim_b: max9295_prim@40 {
+			compatible = "nvidia,max9295";
+			reg = <0x40>;
+			group=<1>;
+			is-prim-ser1;
+		};
+
+		ser_i: max9295_i@11 {
+			compatible = "nvidia,max9295";
+			reg = <0x11>;
+			group=<1>;
+			dser-num = <2>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+		};
+		ser_j: max9295_j@12 {
+			compatible = "nvidia,max9295";
+			reg = <0x12>;
+			group=<1>;
+			dser-num = <2>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+		};
+		ser_k: max9295_k@13 {
+			compatible = "nvidia,max9295";
+			reg = <0x13>;
+			group=<1>;
+			dser-num = <2>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+		};
+		ser_l: max9295_l@14 {
+			compatible = "nvidia,max9295";
+			reg = <0x14>;
+			group=<1>;
+			dser-num = <2>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+		};
+
+		gw5300_i@1b {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <2>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_i>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_j@1c {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <2>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_j>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_k@1d {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <2>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_k>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+		gw5300_l@1e {
+			def-addr = <0x6d>;
+			clocks = <&bpmp_clks TEGRA234_CLK_EXTPERIPH1>,
+					<&bpmp_clks TEGRA234_CLK_EXTPERIPH1>;
+			clock-names = "extperiph1", "pllp_grtba";
+			mclk = "extperiph1";
+			dser-num = <2>;
+			dser-type = "max96712";
+			nvidia,gmsl-ser-device = <&ser_l>;
+			nvidia,gmsl-dser-device = <&dser_c>;
+			gmsl-link {
+				//frame-sync-en;
+			};
+		};
+	};
+
+};

@@ -81,7 +81,7 @@ static int tegra_machine_fepi_init(struct snd_soc_pcm_runtime *rtd)
 	struct device *dev = rtd->card->dev;
 	int err;
 
-	err = snd_soc_dai_set_sysclk(rtd->dais[rtd->num_cpus], SGTL5000_SYSCLK, 12288000,
+	err = snd_soc_dai_set_sysclk(rtd->dais[rtd->num_cpus], SGTL5000_SYSCLK, 11289600,
 				     SND_SOC_CLOCK_IN);
 	if (err) {
 		dev_err(dev, "failed to set sgtl5000 sysclk!\n");

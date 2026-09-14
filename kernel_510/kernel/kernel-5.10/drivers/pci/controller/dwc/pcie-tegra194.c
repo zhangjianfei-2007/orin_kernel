@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
- * PCIe host controller driver for Tegra194 SoC
+ * PCIe host controller driver for Tegra194 SoC  用于Tegra194 SoC的PCIe主控制器驱动程序
  *
  * Copyright (c) 2019-2022, NVIDIA CORPORATION. All rights reserved.
  *
@@ -2161,10 +2161,12 @@ static void tegra_pcie_enable_legacy_interrupts(struct pcie_port *pp)
 	appl_writel(pcie, val, APPL_INTR_EN_L0_0);
 
 	val = appl_readl(pcie, APPL_INTR_EN_L1_8_0);
-	val |= APPL_INTR_EN_L1_8_INTX_EN;
+	//val |= APPL_INTR_EN_L1_8_INTX_EN;
 	val |= APPL_INTR_EN_L1_8_AUTO_BW_INT_EN;
 	val |= APPL_INTR_EN_L1_8_BW_MGT_INT_EN;
+#if 0
 	val |= APPL_INTR_EN_L1_8_EDMA_INT_EN;
+#endif
 	if (IS_ENABLED(CONFIG_PCIEAER))
 		val |= APPL_INTR_EN_L1_8_AER_INT_EN;
 	appl_writel(pcie, val, APPL_INTR_EN_L1_8_0);
@@ -2483,6 +2485,8 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
 	if (pcie->pex_prsnt_gpiod)
 		gpiod_set_value_cansleep(pcie->pex_prsnt_gpiod, 1);
 
+	dev_dbg(pcie->dev, "%s: %d\n", __FUNCTION__, __LINE__);
+
 	return 0;
 }
 
@@ -2656,7 +2660,7 @@ static int tegra_pcie_dw_parse_dt(struct tegra_pcie_dw *pcie)
 		pcie->sd_dev_handle = get_sdhci_device_handle(pcie->dev);
 		if (!pcie->sd_dev_handle)
 			dev_dbg(pcie->dev, "SD7.0 is not supported\n");
-
+		//rp returns here
 		return 0;
 	}
 
@@ -2678,7 +2682,7 @@ static int tegra_pcie_dw_parse_dt(struct tegra_pcie_dw *pcie)
 		dev_printk(level, pcie->dev,
 			   dev_fmt("Failed to get PERST GPIO: %d\n"),
 			   err);
-		return err;
+		//return err;
 	}
 
 	pcie->pex_refclk_sel_gpiod = devm_gpiod_get_optional(pcie->dev,
@@ -3329,6 +3333,8 @@ static int tegra_pcie_config_rp(struct tegra_pcie_dw *pcie)
 	pcie->debugfs = debugfs_create_dir(name, NULL);
 	init_debugfs(pcie);
 
+	dev_dbg(dev, "%s: %d: ret=%d\n", __FUNCTION__, __LINE__, ret);
+
 	return ret;
 
 fail_host_init:
@@ -3568,11 +3574,11 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
 	val |= APPL_INTR_EN_L1_0_0_HOT_RESET_DONE_INT_EN;
 	val |= APPL_INTR_EN_L1_0_0_RDLH_LINK_UP_INT_EN;
 	appl_writel(pcie, val, APPL_INTR_EN_L1_0_0);
-
+#if 0
 	val = appl_readl(pcie, APPL_INTR_EN_L1_8_0);
 	val |= APPL_INTR_EN_L1_8_EDMA_INT_EN;
 	appl_writel(pcie, val, APPL_INTR_EN_L1_8_0);
-
+#endif
 	if (pcie->enable_cdm_check) {
 		val = appl_readl(pcie, APPL_INTR_EN_L0_0);
 		val |= pcie->of_data->cdm_chk_int_en;
@@ -3797,10 +3803,13 @@ static irqreturn_t tegra_pcie_ep_pex_rst_irq(int irq, void *arg)
 {
 	struct tegra_pcie_dw *pcie = arg;
 
-	if (gpiod_get_value(pcie->pex_rst_gpiod))
+	if (gpiod_get_value(pcie->pex_rst_gpiod)){
+		printk("%s: %d: pex_rst_assert\n", __FUNCTION__, __LINE__);
 		pex_ep_event_pex_rst_assert(pcie);
-	else
+	}else{
+		printk("%s: %d: pex_rst_deassert\n", __FUNCTION__, __LINE__);
 		pex_ep_event_pex_rst_deassert(pcie);
+	}
 
 	return IRQ_HANDLED;
 }
@@ -3880,6 +3889,7 @@ tegra_pcie_ep_get_features(struct dw_pcie_ep *ep)
 	return &tegra_pcie_epc_features;
 }
 
+#if 0
 /* Reserve BAR0_BASE + BAR0_MSI_OFFSET of size SZ_64K as MSI page */
 static int tegra_pcie_ep_set_bar(struct dw_pcie_ep *ep, u8 func_no,
 				 struct pci_epf_bar *epf_bar)
@@ -3903,11 +3913,12 @@ static int tegra_pcie_ep_set_bar(struct dw_pcie_ep *ep, u8 func_no,
 
 	return 0;
 }
+#endif
 
 static struct dw_pcie_ep_ops pcie_ep_ops = {
 	.raise_irq = tegra_pcie_ep_raise_irq,
 	.get_features = tegra_pcie_ep_get_features,
-	.set_bar = tegra_pcie_ep_set_bar,
+//	.set_bar = tegra_pcie_ep_set_bar,
 };
 
 static int tegra_pcie_config_ep(struct tegra_pcie_dw *pcie,
@@ -3989,6 +4000,8 @@ static int tegra_pcie_config_ep(struct tegra_pcie_dw *pcie,
 			ret);
 		return ret;
 	}
+
+	dev_dbg(dev, "%s: %d: ret=%d\n", __FUNCTION__, __LINE__, ret);
 
 	return 0;
 }
@@ -4181,6 +4194,7 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
 		pcie->pex_wake_gpiod = devm_gpiod_get_optional(dev, "nvidia,pex-wake",
 							       GPIOD_IN);
 		if (IS_ERR_OR_NULL(pcie->pex_wake_gpiod)) {
+		//if (IS_ERR(pcie->pex_wake_gpiod)) {
 			int err = PTR_ERR(pcie->pex_wake_gpiod);
 
 			if (err == -EPROBE_DEFER)
@@ -4266,7 +4280,7 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
 					ret);
 				goto fail;
 			}
-			if (gpiod_get_value(pcie->pex_prsnt_gpiod))
+			//if (gpiod_get_value(pcie->pex_prsnt_gpiod))
 				ret = tegra_pcie_config_rp(pcie);
 		} else {
 			ret = tegra_pcie_config_rp(pcie);

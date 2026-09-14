@@ -268,6 +268,8 @@ struct tegra_channel {
 	dma_addr_t emb_buf;
 	void *emb_buf_addr;
 	unsigned int emb_buf_size;
+
+	char devnode_name[32];
 };
 
 #define to_tegra_channel(vdev) \

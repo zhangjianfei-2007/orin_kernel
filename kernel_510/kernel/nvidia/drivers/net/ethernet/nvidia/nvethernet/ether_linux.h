@@ -622,6 +622,8 @@ struct ether_priv_data {
 	raw_spinlock_t txts_lock;
 	/** Ref count for ether_get_tx_ts_func */
 	atomic_t tx_ts_ref_cnt;
+
+	unsigned int skip_phy_start;
 };
 
 /**

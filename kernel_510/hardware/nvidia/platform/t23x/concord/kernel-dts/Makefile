@@ -9,6 +9,10 @@ ifneq ($(filter y,$(CONFIG_ARCH_TEGRA_23x_SOC)),)
 BUILD_ENABLE=y
 endif
 
+dtb-$(BUILD_ENABLE) += tegra234-p3701-0004-hy029-0000.dtb
+dtb-$(BUILD_ENABLE) += tegra234-p3701-0004-hy026-0001.dtb
+dtb-$(BUILD_ENABLE) += tegra234-p3701-0004-hy026-0000.dtb
+dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-hy026-0000.dtb
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-p3737-0000.dtb
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-as-p3701-0004-p3737-0000.dtb
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-as-p3770-p3737-0000.dtb
@@ -43,6 +47,8 @@ dtbo-$(BUILD_ENABLE) += tegra234-p3737-camera-e3331-overlay.dtbo
 dtbo-$(BUILD_ENABLE) += tegra234-p3737-camera-e3333-overlay.dtbo
 dtbo-$(BUILD_ENABLE) += tegra234-p3737-camera-imx185-overlay.dtbo
 dtbo-$(BUILD_ENABLE) += tegra234-p3737-camera-imx390-overlay.dtbo
+dtbo-$(BUILD_ENABLE) += tegra234-hy026-overlay-pcie-ep.dtbo
+dtbo-$(BUILD_ENABLE) += tegra234-hy026-overlay-pcie-rp.dtbo
 
 ifneq ($(dtb-y),)
 dtb-y := $(addprefix $(makefile-path)/,$(dtb-y))

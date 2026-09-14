@@ -527,6 +527,7 @@ int tegra_vi_get_port_info(struct tegra_channel *chan,
 	int value = 0xFFFF;
 	int ret = 0;
 	u32 i = 0;
+	const char *temp_str = NULL;
 
 	ports = of_get_child_by_name(node, "ports");
 	if (ports == NULL)
@@ -557,6 +558,21 @@ int tegra_vi_get_port_info(struct tegra_channel *chan,
 			if (value > 16) {
 				dev_err(chan->vi->dev, "vc id >16!\n");
 				return -EINVAL;
+			}
+
+			/* Get video device name */
+			ret = of_property_read_string(ep, "devnode", &temp_str);
+			if (ret < 0) {
+				strcpy(chan->devnode_name, "");
+				dev_err(chan->vi->dev, "devnode name not defined\n");
+			} else {
+				/* Validate that the name plus the null character fits */
+				if (ARRAY_SIZE(chan->devnode_name) >= strlen(temp_str) + 1) {
+					strncpy(chan->devnode_name, temp_str, strlen(temp_str) + 1);
+				} else {
+					dev_err(chan->vi->dev, "Not enough space for devnode name");
+					return -ENOMEM;
+				}
 			}
 
 			/* Get CSI port */

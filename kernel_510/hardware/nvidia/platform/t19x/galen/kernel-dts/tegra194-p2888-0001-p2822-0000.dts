@@ -18,7 +18,7 @@
  * Top level DTS file for CVM:P2888-0001 and CVB:P2822-0000.
  */
 #include "common/tegra194-p2888-0001-p2822-0000-common.dtsi"
-#include "common/tegra194-p2822-camera-modules.dtsi"
+/*#include "common/tegra194-p2822-camera-modules.dtsi"*/
 #include "common/tegra194-audio-p2822-0000.dtsi"
 
 #if defined(LINUX_VERSION) && LINUX_VERSION >= 419
@@ -52,3 +52,14 @@
 };
 
 #endif
+
+//#include "common/tegra194-p2822-0000-camera-gw5200-ar0233-fsync-disabled.dtsi"
+//#include "common/tegra194-p2822-0000-camera-gw5200-imx390-3G-2lane.dtsi"
+//#include "common/tegra194-p2822-0000-camera-gw5200-imx390-reg3G.dtsi"
+//#include "common/tegra194-p2822-0000-camera-gw5200-imx390.dtsi"
+//#include "common/tegra194-p2822-0000-camera-gw5200-imx390-fsync.dtsi"
+//#include "common/tegra194-p2822-0000-camera-gw5200-imx390-3G.dtsi"
+//#include "common/tegra194-p2822-0000-camera-ox01f10.dtsi"
+//#include "common/tegra194-p2822-0000-camera-ap0202-ar0231.dtsi"
+#include "common/tegra194-p2822-0000-camera-ox03c10-HK.dtsi"
+

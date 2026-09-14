@@ -1,0 +1,17 @@
+#!/bin/bash
+# This script runs on target post installation of kernel debian package.
+
+if [ "${1}" != configure ]; then
+	exit 0
+fi
+
+if [ -d /lib/modprobe.d/ ]; then
+	cat - > "/lib/modprobe.d/nonvgpusoc.conf" <<EOF
+#un-comment to disable NVIDIA Linux GPU driver kernel modules for SOC
+#blacklist nvidia-drm
+#blacklist nvidia
+#blacklist nvidia-modeset
+EOF
+
+fi
+

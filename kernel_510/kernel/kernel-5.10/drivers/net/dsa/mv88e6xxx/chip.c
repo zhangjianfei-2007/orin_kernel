@@ -42,6 +42,11 @@
 #include "serdes.h"
 #include "smi.h"
 
+struct mv88e6xxx_chip *switch_chip_listp[2];
+EXPORT_SYMBOL(switch_chip_listp);
+int n_switch_chip=0;
+EXPORT_SYMBOL(n_switch_chip);
+
 static void assert_reg_lock(struct mv88e6xxx_chip *chip)
 {
 	if (unlikely(!mutex_is_locked(&chip->reg_lock))) {
@@ -65,6 +70,7 @@ int mv88e6xxx_read(struct mv88e6xxx_chip *chip, int addr, int reg, u16 *val)
 
 	return 0;
 }
+EXPORT_SYMBOL(mv88e6xxx_read);
 
 int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val)
 {
@@ -81,6 +87,7 @@ int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val)
 
 	return 0;
 }
+EXPORT_SYMBOL(mv88e6xxx_write);
 
 int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
 			u16 mask, u16 val)
@@ -363,8 +370,8 @@ static void mv88e6xxx_irq_poll(struct kthread_work *work)
 						   irq_poll_work.work);
 	mv88e6xxx_g1_irq_thread_work(chip);
 
-	kthread_queue_delayed_work(chip->kworker, &chip->irq_poll_work,
-				   msecs_to_jiffies(100));
+//	kthread_queue_delayed_work(chip->kworker, &chip->irq_poll_work,
+//				   msecs_to_jiffies(100));
 }
 
 static int mv88e6xxx_irq_poll_setup(struct mv88e6xxx_chip *chip)
@@ -2299,7 +2306,7 @@ static int mv88e6xxx_software_reset(struct mv88e6xxx_chip *chip)
 
 	return 0;
 }
-
+#if 0
 static void mv88e6xxx_hardware_reset(struct mv88e6xxx_chip *chip)
 {
 	struct gpio_desc *gpiod = chip->reset;
@@ -2346,7 +2353,32 @@ static int mv88e6xxx_switch_reset(struct mv88e6xxx_chip *chip)
 
 	return mv88e6xxx_software_reset(chip);
 }
+#else
+static int mv88e6xxx_switch_reset(struct mv88e6xxx_chip *chip)
+{
+	u16 reg;
+	int err;
 
+	err = mv88e6xxx_port_read(chip, 0x5, 0x01, &reg);
+	dev_dbg(chip->dev, "%s: %d: err=%d\n", __FUNCTION__, __LINE__, err);
+
+	err = mv88e6xxx_port_read(chip, 0x5, 0x00, &reg);
+	dev_dbg(chip->dev, "%s: %d: err=%d\n", __FUNCTION__, __LINE__, err);
+
+	err = mv88e6xxx_port_read(chip, 0x6, 0x01, &reg);
+	dev_dbg(chip->dev, "%s: %d: err=%d\n", __FUNCTION__, __LINE__, err);
+
+	err = mv88e6xxx_port_write(chip, 0x6, 0x01, 0x4002);
+	dev_dbg(chip->dev, "%s: %d: err=%d\n", __FUNCTION__, __LINE__, err);
+
+	err = mv88e6xxx_port_read(chip, 0x6, 0x01, &reg);
+	dev_dbg(chip->dev, "%s: %d: err=%d\n", __FUNCTION__, __LINE__, err);
+
+	err = mv88e6xxx_port_read(chip, 0x6, 0x00, &reg);
+	dev_dbg(chip->dev, "%s: %d: err=%d\n", __FUNCTION__, __LINE__, err);
+	return 0;
+}
+#endif
 static int mv88e6xxx_set_port_mode(struct mv88e6xxx_chip *chip, int port,
 				   enum mv88e6xxx_frame_mode frame,
 				   enum mv88e6xxx_egress_mode egress, u16 etype)
@@ -5418,7 +5450,7 @@ static const struct dsa_switch_ops mv88e6xxx_switch_ops = {
 	.devlink_param_set	= mv88e6xxx_devlink_param_set,
 	.devlink_info_get	= mv88e6xxx_devlink_info_get,
 };
-
+#if 0
 static int mv88e6xxx_register_switch(struct mv88e6xxx_chip *chip)
 {
 	struct device *dev = chip->dev;
@@ -5440,7 +5472,7 @@ static int mv88e6xxx_register_switch(struct mv88e6xxx_chip *chip)
 
 	return dsa_register_switch(ds);
 }
-
+#endif
 static void mv88e6xxx_unregister_switch(struct mv88e6xxx_chip *chip)
 {
 	dsa_unregister_switch(chip->ds);
@@ -5513,6 +5545,12 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
 	if (!chip) {
 		err = -ENOMEM;
 		goto out;
+	}
+
+	if(n_switch_chip < 2){
+		switch_chip_listp[n_switch_chip]=chip;
+		n_switch_chip++;
+		dev_dbg(chip->dev, "probing switch. n=%d\n", n_switch_chip);
 	}
 
 	chip->info = compat_info;
@@ -5592,14 +5630,14 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
 	if (err)
 		goto out_g1_vtu_prob_irq;
 
-	err = mv88e6xxx_register_switch(chip);
-	if (err)
-		goto out_mdio;
+//	err = mv88e6xxx_register_switch(chip);
+//	if (err)
+//		goto out_mdio;
 
 	return 0;
 
-out_mdio:
-	mv88e6xxx_mdios_unregister(chip);
+//out_mdio:
+//	mv88e6xxx_mdios_unregister(chip);
 out_g1_vtu_prob_irq:
 	mv88e6xxx_g1_vtu_prob_irq_free(chip);
 out_g1_atu_prob_irq:

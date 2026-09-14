@@ -121,7 +121,7 @@
 			regulator-name = "vdd_sys_en";
 			regulator-min-microvolt = <1200000>;
 			regulator-max-microvolt = <1200000>;
-			gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(M, 5) 0>;
+			//gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(M, 5) 0>;
 			enable-active-high;
 		};
 

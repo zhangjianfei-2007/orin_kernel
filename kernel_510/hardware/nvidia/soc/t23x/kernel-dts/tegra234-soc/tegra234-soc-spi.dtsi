@@ -19,6 +19,7 @@
 		spi0 = &spi0;
 		spi1 = &spi1;
 		spi2 = &spi2;
+		spi4 = &spi4;
 		spi6 = &qspi0;
 		spi7 = &qspi1;
 	};
@@ -78,6 +79,27 @@
 		spi-max-frequency = <65000000>;
 		nvidia,clk-parents = "pll_p", "clk_m";
 		clocks = <&bpmp_clks TEGRA234_CLK_SPI3>,
+			<&bpmp_clks TEGRA234_CLK_PLLP_OUT0>,
+			<&bpmp_clks TEGRA234_CLK_CLK_M>;
+		clock-names = "spi", "pll_p", "clk_m";
+		resets = <&bpmp_resets TEGRA234_RESET_SPI3>;
+		reset-names = "spi";
+		status = "disabled";
+	};
+
+	spi4: spi@3250000 {
+		compatible = "nvidia,tegra186-spi";
+		reg = <0x0 0x03250000 0x0 0x10000>;
+		interrupts = <0 40 0x04>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		iommus = <&smmu_niso0 TEGRA_SID_NISO0_GPCDMA_0>;
+		dma-coherent;
+		dmas = <&gpcdma 19>, <&gpcdma 19>;
+		dma-names = "rx", "tx";
+		spi-max-frequency = <65000000>;
+		nvidia,clk-parents = "pll_p", "clk_m";
+		clocks = <&bpmp_clks TEGRA234_CLK_SPI5>,
 			<&bpmp_clks TEGRA234_CLK_PLLP_OUT0>,
 			<&bpmp_clks TEGRA234_CLK_CLK_M>;
 		clock-names = "spi", "pll_p", "clk_m";

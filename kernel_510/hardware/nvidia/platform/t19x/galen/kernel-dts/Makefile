@@ -13,6 +13,7 @@ ifneq ($(filter y,$(CONFIG_ARCH_TEGRA_18x_SOC) $(CONFIG_ARCH_TEGRA_186_SOC)),)
 BUILD_18x_ENABLE=y
 endif
 
+dtb-$(BUILD_19x_ENABLE) += tegra194-p2888-0001-hy009-0000.dtb
 dtb-$(BUILD_19x_ENABLE) += tegra194-p2888-0001-p2822-0000.dtb
 dtb-$(BUILD_19x_ENABLE) += tegra194-p2888-0001-p2822-0000-imx274-hdmi.dtb
 dtb-$(BUILD_19x_ENABLE) += tegra194-p2888-0001-p2822-0000-imx185_v1.dtb

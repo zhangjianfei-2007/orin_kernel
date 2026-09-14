@@ -1,0 +1,3 @@
+#! /bin/bash
+
+make modules TARGET_ARCH=aarch64 CC="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-gcc" LD="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-ld" AR="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-ar" CXX="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-g++" OBJCOPY="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-objcopy" SYSSRC="$PWD/../../../src/kernel/kernel-5.10" SYSOUT="$PWD/../../../out/kernel/" OBJDUMP="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-objdump" ARCH=arm64 CROSS_COMPILE="$PWD/../../../bootlin-toolchain-gcc-93/bin/aarch64-linux-" NV_VERBOSE=1

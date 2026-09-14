@@ -19,6 +19,7 @@
  */
 
 #include "dt-bindings/extcon-ids.h"
+#include <dt-common/jetson/tegra194-p2888-0001-p2822-0000.h>
 #include "tegra194-p2888-0000-a00.dtsi"
 #include <t19x-common-platforms/tegra194-platforms-eqos.dtsi>
 #include "tegra194-p2822-0000-a00.dtsi"
@@ -84,6 +85,23 @@
 		status = "disabled";
 	};
 
+#if defined(SPI1_SLAVE_HANDLER)
+	spi@3210000 {
+		compatible = "nvidia,tegra186-spi-slave";
+		status = "okay";
+		spi-slave; /* todo: handler */
+		slave@0 {
+			compatible = "spi-slave-time";
+			reg = <0x0>;
+			spi-max-frequency = <33000000>;
+			spi-cpha;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+	};
+#else
 	spi@3210000 {
 		status = "okay";
 		spi@0 {
@@ -105,6 +123,7 @@
 			};
 		};
 	};
+#endif
 
 	spi@3270000 {
 		status = "disabled";
@@ -352,6 +371,16 @@
 		status = "okay";
 	};
 
+	pwm_hdr40_pin35: pwm@0 {
+		compatible = "pwm-gpio";
+		pwm-gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(I, 2) GPIO_ACTIVE_LOW>;
+	};
+
+	pwm_des_b: pwm@1 {
+		compatible = "pwm-gpio";
+		pwm-gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(T, 6) GPIO_ACTIVE_LOW>;
+	};
+
 	hdr40_i2c1: i2c@31e0000 {
 		pinctrl-names = "default";
 		pinctrl-0 = <&dpaux_default>;
@@ -427,6 +456,109 @@
 				<&bpmp_clks TEGRA194_CLK_CAN2>;
 		};
 	};
+
+	pinmux@2430000 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&jetson_io_pinmux>;
+		jetson_io_pinmux: exp-header-pinmux {
+			hdr40-pin19 {
+				nvidia,pins = "spi1_mosi_pz5";
+				nvidia,function = "spi1";
+				nvidia,pin-label = "spi1_dout";
+				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin21 {
+				nvidia,pins = "spi1_miso_pz4";
+				nvidia,function = "spi1";
+				nvidia,pin-label = "spi1_din";
+				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin23 {
+				nvidia,pins = "spi1_sck_pz3";
+				nvidia,function = "spi1";
+				nvidia,pin-label = "spi1_sck";
+				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin24 {
+				nvidia,pins = "spi1_cs0_pz6";
+				nvidia,function = "spi1";
+				nvidia,pin-label = "spi1_cs0";
+				nvidia,pull = <TEGRA_PIN_PULL_UP>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin26 {
+				nvidia,pins = "spi1_cs1_pz7";
+				nvidia,function = "spi1";
+				nvidia,pin-label = "spi1_cs1";
+				nvidia,pull = <TEGRA_PIN_PULL_UP>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};
+
+			hdr40-pin29 {
+				nvidia,pins = "can0_din_paa3";
+				nvidia,function = "can0";
+				nvidia,pin-label = "can0_din";
+				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
+				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+			};
+			hdr40-pin31 {
+				nvidia,pins = "can0_dout_paa2";
+				nvidia,function = "can0";
+				nvidia,pin-label = "can0_dout";
+				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin33 {
+				nvidia,pins = "can1_dout_paa0";
+				nvidia,function = "can1";
+				nvidia,pin-label = "can1_dout";
+				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin37 {
+				nvidia,pins = "can1_din_paa1";
+				nvidia,function = "can1";
+				nvidia,pin-label = "can1_din";
+				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
+				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+			};
+			hdr40-pin18 {
+				nvidia,pins = "soc_gpio12_ph0";
+				nvidia,function = "gp";
+				nvidia,pin-group = "pwm5";
+				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};
+			hdr40-pin35 {
+				nvidia,pins = "dap2_fs_pi2";
+				nvidia,function = "rsvd1";
+				nvidia,pin-label = "gpio-pwm";
+				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+				nvidia,lpdr = <TEGRA_PIN_DISABLE>;
+			};			
+		};
+	};
 };
 
 #if TEGRA_XUSB_DT_VERSION == DT_VERSION_2
@@ -460,3 +592,4 @@
 #if LINUX_VERSION >= 414
 #include <tegra194-linux-4.14.dtsi>
 #endif
+

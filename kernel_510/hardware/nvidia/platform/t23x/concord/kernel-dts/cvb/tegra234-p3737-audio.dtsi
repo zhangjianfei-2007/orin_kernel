@@ -42,6 +42,38 @@
 		status = "okay";
 	};
 
+	fixed-regulators {
+                p2822_vdd_3v3_sgtl: regulator@118 {
+                        compatible = "regulator-fixed";
+                        reg = <118>;
+                        regulator-name = "vdd-3v3-sgtl";
+                        regulator-min-microvolt = <3300000>;
+                        regulator-max-microvolt = <3300000>;
+                };
+				p2822_vdd_1v8_sgtl: regulator@119 {
+                        compatible = "regulator-fixed";
+                        reg = <119>;
+                        regulator-name = "vdd-1v8-sgtl";
+                        regulator-min-microvolt = <1800000>;
+                        regulator-max-microvolt = <1800000>;
+                };
+	};
+
+	i2c@31e0000 {
+		sgtl5000: sgtl5000.8-000a@0a {
+			 compatible = "fsl,sgtl5000";
+			reg = <0x0a>;
+			status="okay";
+		    clocks = <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
+			clock-names = "extern1";
+			micbias-resistor-k-ohms = <2>;
+			micbias-voltage-m-volts = <2250>;
+			VDDA-supply = <&p2822_vdd_3v3_sgtl>;
+       		VDDIO-supply = <&p2822_vdd_1v8_sgtl>;
+			#sound-dai-cells = <0>;
+		};
+	};
+
 	tegra_sound: sound {
 		status = "okay";
 		compatible = "nvidia,tegra186-ape";
@@ -52,6 +84,34 @@
 		clock-names = "pll_a", "pll_a_out0", "extern1";
 		assigned-clocks = <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
 		assigned-clock-parents = <&bpmp_clks TEGRA234_CLK_PLLA_OUT0>;
+
+		nvidia-audio-card,widgets =
+			"Microphone",   "H40-SGTL Mic",
+			"Line",         "H40-SGTL Line In",
+			"Line",         "H40-SGTL Line Out";
+
+		nvidia-audio-card,routing =
+			"H40-SGTL MIC_IN",      "H40-SGTL Mic",
+			"H40-SGTL ADC",         "H40-SGTL Mic Bias",
+			"H40-SGTL LINE_IN",     "H40-SGTL Line In",
+			"H40-SGTL Line Out",    "H40-SGTL LINE_OUT";
+
+		i2s1_to_codec: nvidia-audio-card,dai-link@76 {
+			status = "okay";
+			link-name = "fe-pi-audio-z-v2";
+			format = "i2s";
+			link-type = <C2C_LINK>;
+			bit-format = "s16_le";
+			srate = <44100>;
+			num-channel = <2>;
+			i2s1_cpu: cpu {
+				sound-dai = <&tegra_i2s1 I2S_DAP>;
+			};
+			codec {
+				sound-dai = <&sgtl5000>;
+				prefix ="H40-SGTL";
+			};
+		};
 	};
 
 	tegra_sound_graph: sound_graph {

@@ -217,9 +217,10 @@ static int csi5_stream_set_config(struct tegra_csi_channel *chan, u32 stream_id,
 	struct CAPTURE_CONTROL_MSG msg;
 	struct nvcsi_brick_config brick_config;
 	struct nvcsi_cil_config cil_config;
-	bool is_cphy = (csi_lanes == 3);
-	dev_dbg(csi->dev, "%s: stream_id=%u, csi_port=%u\n",
-		__func__, stream_id, csi_port);
+	bool is_cphy;
+	//bool is_cphy = (csi_lanes == 3);
+	dev_dbg(csi->dev, "%s: stream_id=%u, csi_port=%u, csi_lanes=%d\n",
+		__func__, stream_id, csi_port, csi_lanes);
 
 	/* Attempt to find the cil_settingtime from the device tree */
 	if (s_data) {
@@ -250,6 +251,11 @@ static int csi5_stream_set_config(struct tegra_csi_channel *chan, u32 stream_id,
 			}
 		}
 	}
+
+	if(mode != NULL && mode->signal_properties.phy_mode == CSI_PHY_MODE_CPHY)
+		is_cphy = 1;
+	else
+		is_cphy = 0;
 
 	/* Brick config */
 	memset(&brick_config, 0, sizeof(brick_config));

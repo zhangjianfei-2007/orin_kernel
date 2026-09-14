@@ -18,4 +18,14 @@ config PWM_TEGRA_DFLL
 
 	  To compile this driver as a module, choose M here: the module
 	  will be called pwm-tegra-dfll.
+
+config PWM_GPIO
+	tristate "Generic GPIO bit-banged PWM driver"
+	depends on OF
+	help
+	  Generic GPIO bit-banged PWM driver on NVIDIA
+	  Tegra SoCs.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called pwm-gpio.
 endif

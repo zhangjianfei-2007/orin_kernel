@@ -36,6 +36,7 @@ struct spi_slave_time_priv {
 	struct spi_transfer xfer;
 	struct spi_message msg;
 	__be32 buf[2];
+	u8 cmd[8];
 };
 
 static int spi_slave_time_submit(struct spi_slave_time_priv *priv);
@@ -44,10 +45,18 @@ static void spi_slave_time_complete(void *arg)
 {
 	struct spi_slave_time_priv *priv = arg;
 	int ret;
+	int i;
+	u8 buf[32];
 
 	ret = priv->msg.status;
 	if (ret)
 		goto terminate;
+
+	memset(buf, 0, sizeof(buf));
+	for(i=0; i<sizeof(priv->cmd); i++){
+		snprintf(buf+i*3, 4, "%02X ", priv->cmd[i]);
+	}
+	dev_info(&priv->spi->dev, "RX | %s\n", buf);
 
 	ret = spi_slave_time_submit(priv);
 	if (ret)
@@ -96,6 +105,7 @@ static int spi_slave_time_probe(struct spi_device *spi)
 	priv->spi = spi;
 	init_completion(&priv->finished);
 	priv->xfer.tx_buf = priv->buf;
+	priv->xfer.rx_buf = priv->cmd;
 	priv->xfer.len = sizeof(priv->buf);
 
 	ret = spi_slave_time_submit(priv);

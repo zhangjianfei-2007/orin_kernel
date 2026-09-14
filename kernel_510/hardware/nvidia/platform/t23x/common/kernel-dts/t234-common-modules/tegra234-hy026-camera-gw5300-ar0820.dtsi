@@ -1,0 +1,1246 @@
+/*
+ * Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+
+/ {
+		tegra-capture-vi {
+			num-channels = <8>;
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+            #if 1
+				port@0 {
+					reg = <0>;
+					gw5300_vi_in0: endpoint {
+						vc-id = <0>;
+						port-index = <0>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out0>;
+					};
+				};
+				port@1 {
+					reg = <1>;
+					gw5300_vi_in1: endpoint {
+						vc-id = <1>;
+						port-index = <0>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out1>;
+					};
+				};
+				port@2 {
+					reg = <2>;
+					gw5300_vi_in2: endpoint {
+						vc-id = <0>;
+						port-index = <2>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out2>;
+					};
+				};
+				port@3 {
+					reg = <3>;
+					gw5300_vi_in3: endpoint {
+						vc-id = <1>;
+						port-index = <2>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out3>;
+					};
+				};
+            #endif
+            #if 1
+				port@4 {
+					reg = <4>;
+					gw5300_vi_in4: endpoint {
+						vc-id = <0>;
+						port-index = <5>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out4>;
+					};
+				};
+				port@5 {
+					reg = <5>;
+					gw5300_vi_in5: endpoint {
+						vc-id = <1>;
+						port-index = <5>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out5>;
+					};
+				};	
+				port@6 {
+					reg = <6>;
+					gw5300_vi_in6: endpoint {
+						vc-id = <0>;
+						port-index = <4>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out6>;
+					};
+				};
+				port@7 {
+					reg = <7>;
+					gw5300_vi_in7: endpoint {
+						vc-id = <1>;
+						port-index = <4>;
+						bus-width = <4>;
+						remote-endpoint = <&gw5300_csi_out7>;
+					};
+				};
+            #endif
+			};
+		};
+
+	host1x@13e00000 {
+		nvcsi@15a00000 {
+			num-channels = <8>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+        #if 1
+			channel@0 {
+				reg = <0>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in0: endpoint@0 {
+							port-index = <0>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out0>;
+						};
+					};
+
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out0: endpoint@1 {
+							remote-endpoint = <&gw5300_vi_in0>;
+						};
+					};
+
+				};
+			};
+			channel@1 {
+				reg = <1>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in1: endpoint@2 {
+							port-index = <0>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out1>;
+						};
+					};
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out1: endpoint@3 {
+							remote-endpoint = <&gw5300_vi_in1>;
+						};
+					};
+				};
+			};
+			channel@2 {
+				reg = <2>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in2: endpoint@4 {
+							port-index = <2>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out2>;
+						};
+					};
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out2: endpoint@5 {
+							remote-endpoint = <&gw5300_vi_in2>;
+						};
+					};
+				};
+			};
+			channel@3 {
+				reg = <3>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in3: endpoint@6 {
+							port-index = <2>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out3>;
+						};
+					};
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out3: endpoint@7 {
+							remote-endpoint = <&gw5300_vi_in3>;
+						};
+					};
+				};
+			};
+        #endif
+        #if 1
+			channel@4 {
+				reg = <4>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in4: endpoint@8 {
+							port-index = <6>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out4>;
+						};
+					};
+
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out4: endpoint@9 {
+							remote-endpoint = <&gw5300_vi_in4>;
+						};
+					};
+
+				};
+			};
+			channel@5 {
+				reg = <5>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in5: endpoint@10 {
+							port-index = <6>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out5>;
+						};
+					};
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out5: endpoint@11 {
+							remote-endpoint = <&gw5300_vi_in5>;
+						};
+					};
+				};
+			};
+			channel@6 {
+				reg = <6>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in6: endpoint@12 {
+							port-index = <4>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out6>;
+						};
+					};
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out6: endpoint@13 {
+							remote-endpoint = <&gw5300_vi_in6>;
+						};
+					};
+				};
+			};
+			channel@7 {
+				reg = <7>;
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_csi_in7: endpoint@14 {
+							port-index = <4>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_gw5300_out7>;
+						};
+					};
+					port@1 {
+						reg = <1>;
+						gw5300_csi_out7: endpoint@15 {
+							remote-endpoint = <&gw5300_vi_in7>;
+						};
+					};
+				};
+			};
+        #endif
+		};
+
+	};
+
+	i2c@3180000 {
+
+			gw5300_a@1b {
+				compatible = "nvidia,gw5300";
+				reg = <0x1b>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_a";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_a";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_a";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out0: endpoint {
+							vc-id = <0>;
+							port-index = <0>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in0>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "a";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <0>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+			gw5300_b@1c {
+				compatible = "nvidia,gw5300";
+				reg = <0x1c>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_a";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_a";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_a";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out1: endpoint {
+							vc-id = <1>;
+							port-index = <0>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in1>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "b";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <1>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+
+			gw5300_c@1d {
+				compatible = "nvidia,gw5300";
+				reg = <0x1d>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_c";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_c";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_c";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out2: endpoint {
+							vc-id = <0>;
+							port-index = <2>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in2>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "a";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <0>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+
+			gw5300_d@1e{
+				compatible = "nvidia,gw5300";
+				reg = <0x1e>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_c";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_c";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_c";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out3: endpoint {
+							vc-id = <1>;
+							port-index = <2>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in3>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "b";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <1>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+	};
+    #if 1
+	i2c@c250000 {
+			gw5300_e@1b {
+				compatible = "nvidia,gw5300";
+				reg = <0x1b>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_g";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_g";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_g";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out4: endpoint {
+							vc-id = <0>;
+							port-index = <6>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in4>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "a";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <0>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+			gw5300_f@1c {
+				compatible = "nvidia,gw5300";
+				reg = <0x1c>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_g";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_g";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_g";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out5: endpoint {
+							vc-id = <1>;
+							port-index = <6>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in5>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "b";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <1>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+
+			gw5300_g@1d {
+				compatible = "nvidia,gw5300";
+				reg = <0x1d>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_e";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_e";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_e";
+					vc_id = "0";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out6: endpoint {
+							vc-id = <0>;
+							port-index = <4>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in6>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "a";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <0>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+
+			gw5300_h@1e{
+				compatible = "nvidia,gw5300";
+				reg = <0x1e>;
+				physical_w = "15.0";
+				physical_h = "12.5";
+				//def-mode = <0>;
+				sensor_model ="ar0820-SG";
+				post_crop_frame_drop = "0";
+				use_decibel_gain = "true";
+				delayed_gain = "true";
+				//use_sensor_mode_id = "true";
+				mode0 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_e";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "1920";
+					active_h = "1080";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode1 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_e";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "2880";
+					active_h = "1860";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "3160";
+					inherent_gain = "1";
+					pix_clk_hz = "189600000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				mode2 {
+					mclk_khz = "24000";
+					num_lanes = "4";
+					tegra_sinterface = "serial_e";
+					vc_id = "1";
+					discontinuous_clk = "no";
+					dpcm_enable = "false";
+					cil_settletime = "0";
+					mode_type = "yuv";
+					pixel_phase = "yuyv";
+					csi_pixel_bit_depth = "16";
+					active_w = "3840";
+					active_h = "2160";
+					//pixel_t = "yuv_yuyv16";
+					readout_orientation = "0";
+					line_length = "4400";
+					inherent_gain = "1";
+					pix_clk_hz = "148500000";
+					serdes_pix_clk_hz = "300000000";
+					min_framerate = "30";
+					max_framerate = "30";
+				};
+				ports {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					port@0 {
+						reg = <0>;
+						gw5300_gw5300_out7: endpoint {
+							vc-id = <1>;
+							port-index = <4>;
+							bus-width = <4>;
+							remote-endpoint = <&gw5300_csi_in7>;
+							};
+						};
+					};
+				gmsl-link {
+					src-csi-port = "b";
+					dst-csi-port = "b";
+					serdes-csi-link = "b";
+					csi-mode = "1x4";
+					st-vc = <0>;
+					vc-id = <1>;
+					num-lanes = <4>;
+					streams = "yuv422-8";
+					};
+				};
+
+	};
+    #endif
+
+};
+
+/ {
+
+	tegra-camera-platform {
+		compatible = "nvidia, tegra-camera-platform";
+		/**
+		* Physical settings to calculate max ISO BW
+		*
+		* num_csi_lanes = <>;
+		* Total number of CSI lanes when all cameras are active
+		*
+		* max_lane_speed = <>;
+		* Max lane speed in Kbit/s
+		*
+		* min_bits_per_pixel = <>;
+		* Min bits per pixel
+		*
+		* vi_peak_byte_per_pixel = <>;
+		* Max byte per pixel for the VI ISO case
+		*
+		* vi_bw_margin_pct = <>;
+		* Vi bandwidth margin in percentage
+		*
+		* max_pixel_rate = <>;
+		* Max pixel rate in Kpixel/s for the ISP ISO case
+		*
+		* isp_peak_byte_per_pixel = <>;
+		* Max byte per pixel for the ISP ISO case
+		*
+		* isp_bw_margin_pct = <>;
+		* Isp bandwidth margin in percentage
+		*/
+		num_csi_lanes = <8>;
+		max_lane_speed = <4000000>;
+		min_bits_per_pixel = <10>;
+		vi_peak_byte_per_pixel = <2>;
+		vi_bw_margin_pct = <25>;
+		isp_peak_byte_per_pixel = <5>;
+		isp_bw_margin_pct = <25>;
+
+		/**
+		 * The general guideline for naming badge_info contains 3 parts, and is as follows,
+		 * The first part is the camera_board_id for the module; if the module is in a FFD
+		 * platform, then use the platform name for this part.
+		 * The second part contains the position of the module, ex. "rear" or "front".
+		 * The third part contains the last 6 characters of a part number which is found
+		 * in the module's specsheet from the vender.
+		 */
+		modules {
+
+			module0 {
+				badge = "gw5300_bottomleft";
+				position = "camera_0";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 2-001b";
+					proc-device-tree = "/proc/device-tree/i2c@3180000/gw5300_a@1b";
+				};
+			};
+			module1 {
+				badge = "gw5300_bottomright";
+				position = "camera_1";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 2-001c";
+					proc-device-tree = "/proc/device-tree/i2c@3180000/gw5300_b@1c";
+				};
+			};
+			module2 {
+				badge = "gw5300_bottomleft";
+				position = "camera_2";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 2-001d";
+					proc-device-tree = "/proc/device-tree/i2c@3180000/gw5300_c@1d";
+				};
+			};
+			module3 {
+				badge = "gw5300_bottomleft";
+				position = "camera_3";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 2-001e";
+					proc-device-tree = "/proc/device-tree/i2c@3180000/gw5300_d@1e";
+				};
+			};
+           #if 1
+			module4 {
+				badge = "gw5300_topleft";
+				position = "camera_4";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 7-001b";
+					proc-device-tree = "/proc/device-tree/i2c@c250000/gw5300_e@1b";
+				};
+			};
+			module5 {
+				badge = "gw5300_topright";
+				position = "camera_5";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 7-001c";
+					proc-device-tree = "/proc/device-tree/i2c@c250000/gw5300_f@1c";
+				};
+			};
+			module6 {
+				badge = "gw5300_centerleft";
+				position = "camera_6";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 7-001d";
+					proc-device-tree = "/proc/device-tree/i2c@c250000/gw5300_g@1d";
+				};
+			};
+			module7 {
+				badge = "gw5300_centerrigth";
+				position = "camera_7";
+				orientation = "0";
+				drivernode0 {
+					pcl_id = "v4l2_sensor";
+					devname = "gw5300 7-001e";
+					proc-device-tree = "/proc/device-tree/i2c@c250000/gw5300_h@1e";
+				};
+			};
+            #endif
+		};
+	};
+};

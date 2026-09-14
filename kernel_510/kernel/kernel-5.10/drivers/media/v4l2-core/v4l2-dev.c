@@ -883,6 +883,8 @@ int __video_register_device(struct video_device *vdev,
 	int minor_offset = 0;
 	int minor_cnt = VIDEO_NUM_DEVICES;
 	const char *name_base;
+	int n = 0;
+	int valid_name = 1;
 
 	/* A minor value of -1 marks this video device as never
 	   having been registered */
@@ -1029,7 +1031,43 @@ int __video_register_device(struct video_device *vdev,
 	vdev->dev.class = &video_class;
 	vdev->dev.devt = MKDEV(VIDEO_MAJOR, vdev->minor);
 	vdev->dev.parent = vdev->dev_parent;
-	dev_set_name(&vdev->dev, "%s%d", name_base, vdev->num);
+	//dev_set_name(&vdev->dev, "%s%d", name_base, vdev->num);
+	if (VFL_TYPE_VIDEO == type) {
+
+		/* If no video name was assigned in the device tree then assign one */
+		if (strcmp(vdev->name, "") == 0) {
+			snprintf(vdev->name, sizeof(vdev->name), "%s%d", name_base, vdev->num);
+		}
+
+		/* Compare the name we just set with every other device to check that there
+		   isn't other with an equal name */
+		do {
+			/* Assume that the name is valid, otherwise it will be set to 0 and the
+			   loop will continue */
+			valid_name = 1;
+			for (i = 0; i < VIDEO_NUM_DEVICES; i++) {
+				if (video_devices[i] != NULL) {
+					if (video_devices[i]->dev.kobj.name != NULL) {
+						/* If we find another device with the same name then start the
+						   check again with the next videoX name, where X is the n
+						   counter */
+						if (strcmp(video_devices[i]->dev.kobj.name, vdev->name) == 0) {
+							snprintf(vdev->name, sizeof(vdev->name), "%s%d", name_base, n);
+							n++;
+							valid_name = 0;
+							break;
+						}
+					}
+				}
+			}
+			/* If a valid name was found we will exit with the final name set,
+			   otherwise repeat the loop to check the new proposed name */
+		} while (!valid_name);
+
+		dev_set_name(&vdev->dev, "%s", vdev->name);
+	} else {
+		dev_set_name(&vdev->dev, "%s%d", name_base, vdev->num);
+	}
 	ret = device_register(&vdev->dev);
 	if (ret < 0) {
 		pr_err("%s: device_register failed\n", __func__);

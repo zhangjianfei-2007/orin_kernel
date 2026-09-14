@@ -1,0 +1,622 @@
+/*
+ * Common include DTS file for CVM:P2888-0001 and CVB:P2822-0000 variants.
+ *
+ * Copyright (c) 2018-2020, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ */
+
+#include "dt-bindings/extcon-ids.h"
+#include "dt-bindings/gpio/tegra194-gpio.h"
+#include "tegra194-p2888-0000-a00.dtsi"
+#include <t19x-common-platforms/tegra194-hyzx-platforms-eqos.dtsi>
+#include "tegra194-hy009-0000-a00.dtsi"
+#include "tegra194-power-tree-p2888-0001-hy009-1000.dtsi"
+#include <t19x-common-platforms/tegra194-comms.dtsi>
+#include "tegra194-thermal-p2888.dtsi"
+#include "tegra194-plugin-manager-p2888-0000.dtsi"
+#include "tegra194-plugin-manager-p2822-0000.dtsi"
+#include "tegra194-super-module-e2614-p2888-0000.dtsi"
+#include <t19x-common-platforms/tegra194-no-pll-aon-clock.dtsi>
+#define EXTCON_NONE                            0
+#define EXTCON_USB                     1
+#define EXTCON_USB_Host                2
+
+/ {
+	nvidia,dtsfilename = __FILE__;
+	nvidia,dtbbuildtime = __DATE__, __TIME__;
+	nvidia,fastboot-usb-vid = <0x0955>;
+	nvidia,fastboot-usb-pid = <0xee1e>;
+	model = "Jetson-AGX";
+	compatible = "nvidia,galen", "nvidia,jetson-xavier", "nvidia,p2822-0000+p2888-0001", "nvidia,tegra194";
+
+	chosen {
+		bootargs ="console=ttyTCU0,115200";
+		board-has-eeprom;
+	};
+
+	firmware {
+		android {
+			compatible = "android,firmware";
+			hardware = "jetson-xavier";
+			vbmeta {
+				compatible = "android,vbmeta";
+				parts = "vbmeta,kernel,kernel-dtb,APP,vendor,SOS";
+			};
+			fstab {
+				compatible = "android,fstab";
+				vendor {
+					compatible = "android,vendor";
+					dev = "/dev/block/platform/3460000.sdhci/by-name/vendor";
+					type = "ext4";
+					mnt_flags = "ro";
+					fsmgr_flags = "wait,avb";
+				};
+				odm {
+					compatible = "android,odm";
+					dev = "/dev/block/platform/3460000.sdhci/by-name/odm";
+					type = "ext4";
+					mnt_flags = "ro";
+					fsmgr_flags = "wait,avb";
+				};
+			};
+		};
+	};
+	#if 0
+	bluedroid_pm {
+		compatible = "nvidia,tegra-bluedroid_pm";
+		bluedroid_pm,reset-gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(M, 6) 0>;
+		bluedroid_pm,host-wake-gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(Y, 0) 0>;
+		bluedroid_pm,ext-wake-gpio = <&tegra_main_gpio TEGRA194_MAIN_GPIO(M, 7) 0>;
+		interrupt-parent = <&tegra_main_gpio>;
+		interrupts = <TEGRA194_MAIN_GPIO(Y, 0) 0x01>;
+	};
+	#endif
+	/* HW: SPI2 */
+	spi@c260000 {
+                /* status = "disabled"; */
+                /* compatible = "nvidia,tegra186-spi-slave"; */
+                status = "okay";
+                /* nvidia,rx-trigger-words = <0>; */
+                /* SW:spidev1.0 */
+                
+                spi@0 {
+                        compatible = "spidev";
+                        reg = <0>;
+                        status = "okay";
+                        spi-max-frequency = <65000000>;
+                };
+                
+                /* SW: fpga_spi */
+				/* see nvidia,tegra114-spi.txt and spi-tegra114.c for details */
+				/*nvidia,enable-hw-based-cs;*/
+				/* ERROR: could not get clock /spi@c260000:osc(2) */
+				/*nvidia,rx-clk-tap-delay = <0x11>;*/
+                /*
+                fpga_spi@0 {
+                        compatible = "hyzx,fpga_spi";
+                        reg = <0>;
+                        status = "okay";
+                        spi-max-frequency = <25000000>;                   
+                };*/
+                
+		flash0: spi_nor@1 {
+                	#address-cells = <1>;
+	                #size-cells = <1>;
+        	        //compatible = "spansion,m25p80", "jedec,spi-nor";
+			compatible = "jedec,spi-nor";
+                	reg = <2>;
+                	/* spi-max-frequency = <40000000>; */
+                	spi-max-frequency = <10000000>;
+                	/* m25p,fast-read; */
+        	};
+
+       	};
+
+		/* HW: SPI3 */
+        spi@3230000 {
+                /* status = "disabled"; */
+                status = "okay";
+                /* SW: spidev2.0 */
+                spi@0 {
+                        compatible = "spidev";
+                        reg = <0>;
+                        status = "okay";
+                        spi-max-frequency = <65000000>;
+                };
+        };
+
+	/* HW: SPI1 */
+	spi@3210000 {
+		status = "okay";
+		/* SW: spidev0.0 */
+		
+		spi@0 {
+			compatible = "spidev";
+			reg = <0x0>;
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+		/*
+		mcu_spi@0 {
+			compatible = "hyzx,mcu_spi";
+			reg = <0>;
+			status = "okay";
+			spi-max-frequency = <33000000>;                   
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};		
+		*/
+		spi@1 {
+			compatible = "spidev";
+			reg = <0x1>;
+			status = "disabled";
+			spi-max-frequency = <33000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x11>;
+			};
+		};
+	};
+
+	/* QSPI0 */
+	spi@3270000 {
+		status = "disabled";
+	};
+
+	/* QSPI1 */
+	spi@3300000 {
+		status = "disabled";
+	};
+
+	pmc@c370000 {
+		nvidia,invert-interrupt;
+	};
+
+	hdr40_i2c0: i2c@c240000 {
+		bmi160@69 {
+			compatible = "bmi,bmi160";
+			reg = <0x69>;
+			interrupt-parent = <&tegra_aon_gpio>;
+			interrupts = <TEGRA194_AON_GPIO(AA, 2) GPIO_ACTIVE_LOW>;
+			accelerometer_matrix    = [01 00 00 00 01 00 00 00 01];
+			gyroscope_matrix        = [01 00 00 00 01 00 00 00 01];
+			accelerometer_delay_us_min = <1250>;
+			gyroscope_delay_us_min = <1250>;
+			status = "disabled";
+		};
+		ucsi_ccg: ucsi_ccg@8 {
+			/* TITAN4-HY009G: change type-C to type-A */
+			/* status = "okay"; */
+			status = "disabled";
+			typec-extcon {
+				typec_port0: port-0 {
+					status = "okay";
+					#extcon-cells = <1>;
+				};
+				typec_port1: port-1 {
+					status = "okay";
+					#extcon-cells = <1>;
+				};
+			};
+			typec-pd {
+				typec_pd: pd {
+					status = "okay";
+					#extcon-cells = <1>;
+				};
+			};
+		};
+	};
+
+#if TEGRA_XUSB_PADCONTROL_VERSION >= DT_VERSION_2
+
+	xusb_padctl: xusb_padctl@3520000 {
+		status = "okay";
+
+		pads {
+			usb2 {
+				lanes {
+					usb2-0 {
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+					usb2-1 { /* P2822: wired to UTMI pad 1 (USB2 port 1) */
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+					usb2-2 {
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+					usb2-3 {
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+				};
+			};
+			usb3 {
+				lanes {
+					usb3-0 { /* P2822: wired to UPHY lane 6 (USB3.1 port 0 according to UPHY lane mapping) */
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+					usb3-2 { /* P2822: wired to UPHY lane 1 (USB3.1 port 2 according to UPHY lane mapping) */
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+					usb3-3 {
+						nvidia,function = "xusb";
+						status = "okay";
+					};
+				};
+			};
+		};
+		
+		ports {
+			usb2-0 { /* TITAN4-HY009G: OTG wired to Xavier_USB0 */
+				mode = "host";
+				/* mode = "device"; */
+				status = "okay";
+				
+				/* P2822 & TITAN4-HY009G */
+				/* tegra-xusb-padctl 3520000.xusb_padctl: no port found for USB3 lane 2 */
+				/* tegra-xusb-padctl 3520000.xusb_padctl: no port found for USB2 lane 0 */
+				/*status = "disabled";*/
+			};
+			usb2-1 {
+				mode = "host";
+				status = "okay";
+			};
+			usb2-2 {
+				mode = "host";
+				status = "okay";
+			};
+			usb2-3 {
+				mode = "host";
+				status = "okay";
+			};
+			
+			/* - nvidia,usb2-companion: A single cell that specifies the physical port number
+   			to map this super-speed USB port to. The range of valid port numbers varies
+   			with the SoC generation:
+  			- 0-2: for Tegra124 and Tegra186
+   			- 0-3: for Tegra194, Tegra210 and Tegra210b01
+			*/
+			usb3-0 {
+				/*P2822 & TITAN4-HY009G(USB-A UP)*/
+				nvidia,usb2-companion = <1>;
+				status = "okay";
+				
+				/*tegra-xusb-padctl 3520000.xusb_padctl: no port found for USB3 lane 0 */
+				/* status = "disabled"; */ /*all usb ports died, why? */
+			};
+			usb3-2 {
+				/*P2822*/
+				/*nvidia,usb2-companion = <0>;*/
+				/*TITAN4-HY009G: USB-A DOWN*/
+				nvidia,usb2-companion = <2>;
+				status = "okay";
+				
+				/* tegra-xusb-padctl 3520000.xusb_padctl: no port found for USB3 lane 2 */
+				/* status = "disabled"; */ /*all usb ports died, why? */
+			};
+			usb3-3 {
+				nvidia,usb2-companion = <3>;
+				/*Restrict USB3 port to gen1 capability*/
+				nvidia,usb3-gen1-only= <1>;
+				status = "okay";
+			};
+		};
+	};
+#endif
+
+       external-connection {
+               vbus_id_extcon: extcon@1 {
+                       compatible = "extcon-gpio-states";
+                       reg = <0x01>;
+                       extcon-gpio,name = "VBUS";
+                       extcon-gpio,wait-for-gpio-scan = <0>;
+                       extcon-gpio,cable-states = <0x3 0x0
+                                                   0x0 0x2
+                                                   0x1 0x2
+                                                   0x2 0x1>;
+                       gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(BB, 2) 0
+                               &tegra_main_gpio TEGRA194_MAIN_GPIO(Q, 0) 0>;
+                       extcon-gpio,out-cable-name-strings = "USB", "USB-Host";
+                       extcon-gpio,out-cable-names = <EXTCON_USB EXTCON_USB_HOST EXTCON_NONE>;
+                       wakeup-source;
+                       #extcon-cells = <1>;
+               };
+       };
+
+	/*XUSB device mode takes UTMI pad#0 and SuperSpeed pad#2 for a USB3.0 device port*/
+	/*see nvidia,tegra-xudc.txt for details*/
+	tegra_xudc: xudc@3550000 {
+		/* TITAN4-HY009G: all ports available if comment the following 3 lines */
+		extcon-cables = <&vbus_id_extcon 0>;
+		extcon-cable-names = "vbus";
+		#extcon-cells = <1>;
+#if TEGRA_XUSB_PADCONTROL_VERSION >= DT_VERSION_2
+		/* P2822: J512 */
+/*		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-0}>,
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-2}>;
+*/
+
+		/* TITAN4-HY009G: USB-A UP is HOST port, so comment it.*/
+/*		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-1}>,
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-0}>; 
+*/
+			
+		/* TITAN4-HY009G: USB-A DOWN is HOST port, so comment it*/	
+/*		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-2}>,
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-2}>;
+*/			
+		phy-names = "usb2", "usb3";
+		nvidia,xusb-padctl = <&xusb_padctl>;
+#endif
+		nvidia,boost_cpu_freq = <1200>;
+		status = "okay";
+		/*status = "disabled";*/
+	};
+
+	/* XUSB host mode takes UTMI pad#0,1,2,3 and SuperSpeed pad#0,1,2,3 for a USB 3.0 host */
+	/* see nvidia,tegra-xhci.txt for details*/
+	tegra_xhci: xhci@3610000 {
+		/* TITAN4-HY009G: change type-C to type-A */
+		extcon-cables = <&vbus_id_extcon 1>;
+		extcon-cable-names = "id";
+		#extcon-cells = <1>;
+#if TEGRA_XUSB_PADCONTROL_VERSION >= DT_VERSION_2
+		phys = <&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-0}>,
+			<&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-1}>,
+			<&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-3}>,
+			<&{/xusb_padctl@3520000/pads/usb2/lanes/usb2-2}>,
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-2}>,
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-0}>,
+			<&{/xusb_padctl@3520000/pads/usb3/lanes/usb3-3}>;
+		phy-names = "usb2-0", "usb2-1", "usb2-3", "usb2-2",
+			"usb3-2", "usb3-0", "usb3-3";
+		/*phy-names = "usb2-0", "usb2-1", "usb2-3",
+			"usb3-2", "usb3-0", "usb3-3";*/
+		nvidia,xusb-padctl = <&xusb_padctl>;
+#endif
+		status = "okay";
+	};
+
+	arm-pmu {
+		status = "okay";
+	};
+
+	power-domain {
+		status = "disabled";
+	};
+
+	interrupt-controller {
+		status = "disabled";
+	};
+
+	mods-simple-bus {
+		status = "disabled";
+	};
+
+	eeprom-manager {
+		/*status = "disabled";*/
+		status = "okay";
+	};
+
+	cpuidle {
+		compatible = "nvidia,tegra19x-cpuidle";
+		status = "okay";
+	};
+
+	thermal-zones {
+		status = "disabled";
+	};
+
+	reserved-memory {
+		ramoops_carveout {
+			status = "okay";
+		};
+	};
+
+	mttcan@c310000 {
+		status = "okay";
+	};
+
+	mttcan@c320000 {
+		status = "okay";
+	};
+
+	serial@3110000 {
+		status = "okay";
+	};
+
+	pwm@3280000 {
+		status = "okay";
+	};
+
+	pwm@32c0000 {
+		status = "okay";
+	};
+
+	pwm@32f0000 {
+		status = "okay";
+	};
+
+	hdr40_i2c1: i2c@31e0000 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&dpaux_default>;
+		bmi160@69 {
+			compatible = "bmi,bmi160";
+			reg = <0x69>;
+			accelerometer_matrix    = [01 00 00 00 01 00 00 00 01];
+			gyroscope_matrix        = [01 00 00 00 01 00 00 00 01];
+			status = "disabled";
+		};
+	};
+
+	host1x {
+		dpaux@155F0000 {
+			status = "okay";
+			compatible = "nvidia,tegra194-dpaux3-padctl";
+			/delete-property/ power-domains;
+			dpaux_default: pinmux@0 {
+				dpaux3_pins {
+					pins = "dpaux3-3";
+					function = "i2c";
+				};
+			};
+		};
+	};
+
+	ufshci@2450000 {
+		status = "disabled";
+		nvidia,enable-hs-mode;
+		nvidia,cd-gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(EE, 0) GPIO_ACTIVE_HIGH>;
+		nvidia,cd-wakeup-capable;
+	};
+	pfsd {
+		pwm_polarity= <PWM_POLARITY_INVERTED>;
+		suspend_state = <0>;
+	};
+	clocks-init {
+		compatible = "nvidia,clocks-config";
+		status = "okay";
+		disable {
+			clocks = <&aon_clks TEGRA194_CLK_PLLAON>,
+				<&bpmp_clks TEGRA194_CLK_CAN1>,
+				<&bpmp_clks TEGRA194_CLK_CAN2>;
+		};
+	};
+	
+	pinmux@2430000 {
+		pinctrl-0 = <0x1aa>;
+		pinctrl-names = "default";
+		compatible = "nvidia,tegra194-pinmux";
+		reg = <0x0 0x2430000 0x0 0x17000 0x0 0xc300000 0x0 0x4000>;
+		#gpio-range-cells = <0x3>;
+		status = "okay";
+		linux,phandle = <0xe7>;
+		phandle = <0xe7>;
+		
+	    header-40pin-pinmux {
+	        phandle = <0x1aa>;
+	        linux,phandle = <0x1aa>;
+	
+		   pin24 {
+		            nvidia,lpdr = <0x0>;
+		            nvidia,enable-input = <0x1>;
+		            nvidia,tristate = <0x0>;
+		            nvidia,pull = <0x2>;
+		            nvidia,pins = "spi1_cs0_pz6";
+		            nvidia,function = "spi1";
+		    };
+		
+		    pin23 {
+		            nvidia,lpdr = <0x0>;
+		            nvidia,enable-input = <0x1>;
+		            nvidia,tristate = <0x0>;
+		            nvidia,pull = <0x1>;
+		            nvidia,pins = "spi1_sck_pz3";
+		            nvidia,function = "spi1";
+		    };
+		
+		    pin21 {
+		            nvidia,lpdr = <0x0>;
+		            nvidia,enable-input = <0x1>;
+		            nvidia,tristate = <0x0>;
+		            nvidia,pull = <0x1>;
+		            nvidia,pins = "spi1_miso_pz4";
+		            nvidia,function = "spi1";
+		    };
+		
+		    pin19 {
+		            nvidia,lpdr = <0x0>;
+		            nvidia,enable-input = <0x1>;
+		            nvidia,tristate = <0x0>;
+		            nvidia,pull = <0x1>;
+		            nvidia,pins = "spi1_mosi_pz5";
+		            nvidia,function = "spi1";
+		    };
+		    
+			pin29 {
+					nvidia,pins = "can0_din_paa3";
+					nvidia,pull = <0x1>;
+					nvidia,tristate = <0x0>;
+					nvidia,enable-input = <0x1>;
+					nvidia,function = "can0";
+			};
+			
+			pin31 {
+					nvidia,pins = "can0_dout_paa2";
+					nvidia,pull = <0x1>;
+					nvidia,tristate = <0x0>;
+					nvidia,enable-input = <0x1>;
+					nvidia,function = "can0";
+			};
+			
+			pin37 {
+					nvidia,pins = "can1_din_paa1";
+					nvidia,pull = <0x1>;
+					nvidia,tristate = <0x0>;
+					nvidia,enable-input = <0x1>;
+					nvidia,function = "can1";
+			};
+
+			pin33 {
+					nvidia,pins = "can1_dout_paa0";
+					nvidia,pull = <0x1>;
+					nvidia,tristate = <0x0>;
+					nvidia,enable-input = <0x1>;
+					nvidia,function = "can1";
+			};
+		};
+	
+	};
+};
+
+/* TITAN4-HY009G: change type-C to type-A */
+/*
+&head0 {
+	extcon-cables = <&typec_port0 2 &typec_port1 2>;
+	extcon-cable-names = "typec0", "typec1";
+	#extcon-cells = <1>;
+};
+
+&head1 {
+	extcon-cables = <&typec_port0 2 &typec_port1 2>;
+	extcon-cable-names = "typec0", "typec1";
+	#extcon-cells = <1>;
+};
+
+&head2 {
+	extcon-cables = <&typec_port0 2 &typec_port1 2>;
+	extcon-cable-names = "typec0", "typec1";
+	#extcon-cells = <1>;
+};
+
+&sor0 {
+	nvidia,typec-port = /bits/ 8 <0>;
+};
+
+&sor1 {
+	nvidia,typec-port = /bits/ 8 <1>;
+};
+*/
+
+#if LINUX_VERSION >= 414
+#include <tegra194-linux-4.14.dtsi>
+#endif
+

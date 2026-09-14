@@ -243,6 +243,7 @@ static int nvvrs_rtc_read_time(struct device *dev, struct rtc_time *tm)
 	rtc_time64_to_tm(secs, tm);
 out:
 	mutex_unlock(&info->lock);
+	//dev_info(info->dev, "secs = %lld.\n", secs);
 	return ret;
 }
 
@@ -451,6 +452,9 @@ static int nvvrs_rtc_probe(struct platform_device *pdev)
 			ret = -EINVAL;
 		return ret;
 	}
+
+	dev_info(info->dev, "client->irq = %d. uie unsupported\n", client->irq);
+	info->rtc_dev->uie_unsupported = 1;
 
 	ret = request_threaded_irq(info->rtc_irq, NULL, nvvrs_rtc_irq_handler, 0,
 					"rtc-alarm", info);

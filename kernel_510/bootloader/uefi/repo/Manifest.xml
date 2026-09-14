@@ -1,0 +1,98 @@
+<Manifest>
+  <ProjectInfo>
+    <CodeName>NVIDIA-Jetson</CodeName>
+    <Description>NVIDIA Jetson Platform</Description>
+    <DevLead>jbrasen@nvidia.com</DevLead>
+    <LeadReviewers>
+      <Reviewer>jbrasen@nvidia.com</Reviewer>
+      <Reviewer>ashishsingha@nvidia.com</Reviewer>
+    </LeadReviewers>
+  </ProjectInfo>
+
+  <GeneralConfig>
+    <PinPath>edk2-platforms/NVIDIA-Jetson/pins</PinPath>
+    <DefaultCombo combination="master" />
+    <CurrentClonedCombo combination="jetson-r35.1" />
+  <SourceManifestRepository manifest_repo="nvidia" />
+</GeneralConfig>
+
+  <SparseCheckout>
+    <SparseSettings sparseByDefault="true" />
+    <SparseData>
+      
+      <AlwaysInclude>*.*</AlwaysInclude>
+    </SparseData>
+    <SparseData remote="Edk2PlatformsRepo">
+      <AlwaysInclude>Drivers</AlwaysInclude>
+      <AlwaysInclude>Features</AlwaysInclude>
+    </SparseData>
+  </SparseCheckout>
+
+  <RemoteList>
+    
+    <Remote name="Edk2Repo">https://github.com/NVIDIA/edk2.git</Remote>
+    <Remote name="Edk2PlatformsRepo">https://github.com/NVIDIA/edk2-platforms.git</Remote>
+    <Remote name="Edk2NonOsiRepo">https://github.com/NVIDIA/edk2-non-osi.git</Remote>
+    <Remote name="Edk2NvidiaRepo">https://github.com/NVIDIA/edk2-nvidia.git</Remote>
+    <Remote name="Edk2NvidiaNonOsiRepo">https://github.com/NVIDIA/edk2-nvidia-non-osi.git</Remote>
+  </RemoteList>
+
+  <ClientGitHookList>
+  </ClientGitHookList>
+
+  <CommitTemplates>
+  </CommitTemplates>
+
+  <SubmoduleAlternateRemotes>
+  </SubmoduleAlternateRemotes>
+
+  <CombinationList>
+    <Combination description="The main codeline" name="main">
+      <Source branch="main-edk2-stable202205" enableSubmodule="true" localRoot="edk2" remote="Edk2Repo" />
+      <Source branch="main-upstream-20220404" localRoot="edk2-non-osi" remote="Edk2NonOsiRepo" />
+      <Source branch="main-upstream-20220228" localRoot="edk2-platforms" remote="Edk2PlatformsRepo" sparseCheckout="true" />
+      <Source branch="main" localRoot="edk2-nvidia" remote="Edk2NvidiaRepo" />
+      <Source branch="main" localRoot="edk2-nvidia-non-osi" remote="Edk2NvidiaNonOsiRepo" />
+    </Combination>
+
+    
+    <Combination description="The rel-34 codeline" name="rel-34">
+      <Source branch="rel-34-edk2-stable202111" enableSubmodule="true" localRoot="edk2" remote="Edk2Repo" />
+      <Source branch="rel-34-upstream-20210901" localRoot="edk2-platforms" remote="Edk2PlatformsRepo" sparseCheckout="true" />
+      <Source branch="rel-34" localRoot="edk2-nvidia" remote="Edk2NvidiaRepo" />
+      <Source branch="rel-34" localRoot="edk2-nvidia-non-osi" remote="Edk2NvidiaNonOsiRepo" />
+    </Combination>
+    <Combination description="The rel-34 codeline, plus updates" name="rel-34-updates">
+      <Source branch="rel-34-edk2-stable202111-updates" enableSubmodule="true" localRoot="edk2" remote="Edk2Repo" />
+      <Source branch="rel-34-upstream-20210901-updates" localRoot="edk2-platforms" remote="Edk2PlatformsRepo" sparseCheckout="true" />
+      <Source branch="rel-34-updates" localRoot="edk2-nvidia" remote="Edk2NvidiaRepo" />
+      <Source branch="rel-34-updates" localRoot="edk2-nvidia-non-osi" remote="Edk2NvidiaNonOsiRepo" />
+    </Combination>
+
+    
+    <Combination description="The rel-35 codeline" name="rel-35">
+      <Source branch="rel-35-edk2-stable202205" enableSubmodule="true" localRoot="edk2" remote="Edk2Repo" />
+      <Source branch="rel-35-upstream-20220404" localRoot="edk2-non-osi" remote="Edk2NonOsiRepo" />
+      <Source branch="rel-35-upstream-20220208" localRoot="edk2-platforms" remote="Edk2PlatformsRepo" sparseCheckout="true" />
+      <Source branch="rel-35" localRoot="edk2-nvidia" remote="Edk2NvidiaRepo" />
+      <Source branch="rel-35" localRoot="edk2-nvidia-non-osi" remote="Edk2NvidiaNonOsiRepo" />
+    </Combination>
+    <Combination description="The rel-35 codeline, plus updates" name="rel-35-updates">
+      <Source branch="rel-35-edk2-stable202205-updates" enableSubmodule="true" localRoot="edk2" remote="Edk2Repo" />
+      <Source branch="rel-35-upstream-20220404" localRoot="edk2-non-osi" remote="Edk2NonOsiRepo" />
+      <Source branch="rel-35-upstream-20220208-updates" localRoot="edk2-platforms" remote="Edk2PlatformsRepo" sparseCheckout="true" />
+      <Source branch="rel-35-updates" localRoot="edk2-nvidia" remote="Edk2NvidiaRepo" />
+      <Source branch="rel-35-updates" localRoot="edk2-nvidia-non-osi" remote="Edk2NvidiaNonOsiRepo" />
+    </Combination>
+    <Combination description="The jetson-r35.1 release" name="jetson-r35.1">
+      <Source enableSubmodule="true" localRoot="edk2" remote="Edk2Repo" tag="jetson-r35.1" />
+      <Source localRoot="edk2-non-osi" remote="Edk2NonOsiRepo" tag="jetson-r35.1" />
+      <Source localRoot="edk2-platforms" remote="Edk2PlatformsRepo" sparseCheckout="true" tag="jetson-r35.1" />
+      <Source localRoot="edk2-nvidia" remote="Edk2NvidiaRepo" tag="jetson-r35.1" />
+      <Source localRoot="edk2-nvidia-non-osi" remote="Edk2NvidiaNonOsiRepo" tag="jetson-r35.1" />
+    </Combination>
+  </CombinationList>
+
+  <DscList>
+  </DscList>
+</Manifest>

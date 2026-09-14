@@ -2477,7 +2477,8 @@ static int ether_mdio_register(struct ether_priv_data *pdata)
 	if (ret) {
 		dev_err(dev, "failed to register MDIO bus (%s)\n",
 			new_bus->name);
-		goto exit;
+		if(!pdata->skip_phy_start)
+			goto exit;
 	}
 
 	pdata->mii = new_bus;
@@ -2563,7 +2564,8 @@ static int ether_open(struct net_device *dev)
 	ret = ether_mdio_register(pdata);
 	if (ret < 0) {
 		dev_err(&dev->dev, "failed to register MDIO bus\n");
-		goto err_mdio_reg;
+		if(!pdata->skip_phy_start)
+			goto err_mdio_reg;
 	}
 
 	atomic_set(&pdata->padcal_in_progress, OSI_DISABLE);
@@ -2572,7 +2574,9 @@ static int ether_open(struct net_device *dev)
 	if (ret < 0) {
 		dev_err(&dev->dev, "%s: Cannot attach to PHY (error: %d)\n",
 			__func__, ret);
-		goto err_phy_init;
+		//goto err_phy_init;
+		if(!pdata->skip_phy_start)
+			goto err_phy_init;
 	}
 
 	osi_set_rx_buf_len(pdata->osi_dma);
@@ -2681,7 +2685,9 @@ static int ether_open(struct net_device *dev)
 		goto err_r_irq;
 	}
 	/* start PHY */
-	phy_start(pdata->phydev);
+	//phy_start(pdata->phydev);
+	if(!pdata->skip_phy_start)
+		phy_start(pdata->phydev);
 
 	/* start network queues */
 	netif_tx_start_all_queues(pdata->ndev);
@@ -2896,6 +2902,7 @@ static int ether_close(struct net_device *ndev)
 #ifdef HSI_SUPPORT
 	cancel_delayed_work_sync(&pdata->ether_hsi_work);
 #endif
+
 	/* Stop and disconnect the PHY */
 	if (pdata->phydev != NULL) {
 		/* Check and clear WoL status */
@@ -2968,7 +2975,8 @@ static int ether_close(struct net_device *ndev)
 	}
 
 	if (pdata->mii != NULL) {
-		mdiobus_unregister(pdata->mii);
+		if(!pdata->skip_phy_start)
+			mdiobus_unregister(pdata->mii);
 	}
 
 	/* Disable clock */
@@ -5550,6 +5558,14 @@ static int ether_parse_dt(struct ether_priv_data *pdata)
 	/* This variable is for DT entry which should not fail bootup */
 	int ret_val = 0;
 
+	/* Read flag to skip phy start for dsa */
+	ret = of_property_read_u32(np, "nvidia,skip_phy_start",
+				   &pdata->skip_phy_start);
+	if (ret != 0) {
+		dev_info(dev, "failed to read skip phy start flag, default 0\n");
+		pdata->skip_phy_start = 0U;
+	}
+
 	/* Read flag to skip MAC reset on platform */
 	ret = of_property_read_u32(np, "nvidia,skip_mac_reset",
 				   &pdata->skip_mac_reset);
@@ -6660,6 +6676,9 @@ static void ether_shutdown(struct platform_device *pdev)
 	if (!netif_running(ndev))
 		return;
 
+	if(pdata->skip_phy_start)
+		return;
+
 	ret = ether_close(ndev);
 	if (ret)
 		dev_err(pdata->dev, "Failure in ether_close");
@@ -6874,7 +6893,9 @@ static int ether_resume(struct ether_priv_data *pdata)
 		/* configure phy init */
 		phy_init_hw(pdata->phydev);
 		/* start phy */
-		phy_start(pdata->phydev);
+		//phy_start(pdata->phydev);
+		if(!pdata->skip_phy_start)
+			phy_start(pdata->phydev);
 	}
 	/* start network queues */
 	netif_tx_start_all_queues(ndev);

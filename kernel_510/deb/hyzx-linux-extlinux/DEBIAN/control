@@ -1,0 +1,7 @@
+Package: hyzx-linux-extlinux
+Architecture: arm64
+Maintainer: Huan Yu Zhi Xing Corporation
+Section: kernel
+Priority: standard
+Homepage: http://www.in-driving.com
+Description: Linux Kernel Package

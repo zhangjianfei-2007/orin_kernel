@@ -175,11 +175,11 @@
         };
 
 	serial@3130000 {
-		status = "okay";
+		status = "disabled";
 	};
 
 	serial@3140000 {
-		status = "disabled";
+		status = "okay";
 	};
 
 	combined-uart {
@@ -226,6 +226,18 @@
 				prod = <0x04 0x000000ff 0x10>;
 			};
 		};
+#if 0
+		spi@0 { /* chip select 0 */
+			compatible = "tegra-spidev";
+			reg = <0x0>;
+			spi-max-frequency = <50000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x10>;
+				nvidia,tx-clk-tap-delay = <0x0>;
+			};
+		};
+#else
 		/* QSPI NOR */
 		spiflash@0 {
 			#address-cells = <1>;
@@ -247,6 +259,7 @@
 				nvidia,ctrl-bus-clk-ratio = <1>;
 			};
 		};
+#endif
 	};
 
 	sdhci@3460000 {

@@ -167,7 +167,7 @@ config NV_VIDEO_IMX390
 
 config NV_DESER_MAX96712
 
-	tristate "MAX92712 Deserializer"
+	tristate "MAX96712 Deserializer"
 	help
 	  If you say yes here you get support for the MAX96712 deserializer.
 
@@ -184,6 +184,68 @@ config NV_VIDEO_AR0234
 	  To compile this driver as a module, choose M here: the module
 	  will be called ar0234.
 
+config I2C_IOEXPANDER_SER_MAX96705
+	tristate "MAX96705 Serializer I2C IO Expander"
+	help
+	  If you say yes here you get support for the MAX96705 serializer
+	  I2C IO Expander.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called max96705.
+
+config VIDEO_GW5200
+	tristate "GW5200 camera ISP support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API && I2C_IOEXPANDER_DESER_MAX9296 && I2C_IOEXPANDER_SER_MAX9295
+	help
+	  This is a Video4Linux2 sensor-level driver.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called gw5200.
+
+config VIDEO_AP0202
+	tristate "AP0202 camera ISP support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API && I2C_IOEXPANDER_DESER_MAX9296 && I2C_IOEXPANDER_SER_MAX96705
+	help
+	  This is a Video4Linux2 sensor-level driver.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called ap0202.
+
+config VIDEO_OX01F10
+	tristate "OX01F10 soc (camera sensor and ISP) support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API && I2C_IOEXPANDER_DESER_MAX9296 && I2C_IOEXPANDER_SER_MAX96705
+	help
+	  This is a Video4Linux2 sensor-level driver.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called ox01f10.
+
+config VIDEO_OX03C10
+	tristate "OX03C10 camera sensor support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API && I2C_IOEXPANDER_DESER_MAX9296 && I2C_IOEXPANDER_SER_MAX9295
+	help
+	  This is a Video4Linux2 sensor-level driver.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called ox03c10.
+
+config VIDEO_MAX2008X
+	tristate "Camera Power Protectors driver max20086-20089 support"
+	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API 
+	help
+	  This is a Dual/Quad Camera Power Protectors driver.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called max2008X.
+
+config VIDEO_SIMPLIFIED_CAM_MGT
+	tristate "simplified camera managment support"
+	depends on VIDEO_MAX2008X && I2C_IOEXPANDER_DESER_MAX9296 && I2C_IOEXPANDER_SER_MAX9295
+	help
+	  This is a Video4Linux2 sensor-level driver.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called camera.
 endmenu
 
 endif

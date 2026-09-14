@@ -1119,15 +1119,19 @@ static void mttcan_start(struct net_device *dev)
 		/* Error Warning */
 		priv->can.state = CAN_STATE_ERROR_WARNING;
 	} else {
+		mttcan_controller_config(dev);
+
+	ttcan_clear_intr(ttcan);
+	ttcan_clear_tt_intr(ttcan);
 		/* Error Active */
 		priv->can.state = CAN_STATE_ERROR_ACTIVE;
 	}
-
+#if 0
 	mttcan_controller_config(dev);
 
 	ttcan_clear_intr(ttcan);
 	ttcan_clear_tt_intr(ttcan);
-
+#endif
 	/* start Tx/Rx and enable protected mode */
 	if (!priv->tt_param[0]) {
 		ttcan_reset_init(ttcan);
@@ -1953,6 +1957,7 @@ static int mttcan_resume(struct platform_device *pdev)
 	if (ndev->flags & IFF_UP)
 		mttcan_start(ndev);
 
+	//priv->can.state = CAN_STATE_ERROR_ACTIVE;
 	if (netif_running(ndev)) {
 		netif_device_attach(ndev);
 		netif_start_queue(ndev);
