@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0
+subdir-ccflags-y += -DDEBUG
 obj-$(CONFIG_NET_DSA_MV88E6XXX) += mv88e6xxx.o
 mv88e6xxx-objs := chip.o
 mv88e6xxx-objs += devlink.o
@@ -16,6 +17,9 @@ mv88e6xxx-$(CONFIG_NET_DSA_MV88E6XXX_PTP) += ptp.o
 mv88e6xxx-objs += serdes.o
 mv88e6xxx-objs += smi.o
 mv88e6xxx-objs += trace.o
+
+obj-$(CONFIG_NET_DSA_MV88E6XXX_SIMPLIFIED_SWI_MGT) += switch.o
+#obj-m += switch.o
 
 # for tracing framework to find trace.h
 CFLAGS_trace.o := -I$(src)

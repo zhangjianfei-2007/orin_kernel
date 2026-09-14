@@ -1278,10 +1278,10 @@ static void tegra_pcie_enable_legacy_interrupts(struct pcie_port *pp)
 	appl_writel(pcie, val, APPL_INTR_EN_L0_0);
 
 	val = appl_readl(pcie, APPL_INTR_EN_L1_8_0);
-	val |= APPL_INTR_EN_L1_8_INTX_EN;
+	// val |= APPL_INTR_EN_L1_8_INTX_EN;
 	val |= APPL_INTR_EN_L1_8_AUTO_BW_INT_EN;
 	val |= APPL_INTR_EN_L1_8_BW_MGT_INT_EN;
-	val |= APPL_INTR_EN_L1_8_EDMA_INT_EN;
+	// val |= APPL_INTR_EN_L1_8_EDMA_INT_EN;
 	if (IS_ENABLED(CONFIG_PCIEAER))
 		val |= APPL_INTR_EN_L1_8_AER_INT_EN;
 	appl_writel(pcie, val, APPL_INTR_EN_L1_8_0);
@@ -1472,7 +1472,7 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
 
 		if (pcie->pex_prsnt_gpiod)
 			gpiod_set_value_cansleep(pcie->pex_prsnt_gpiod, 1);
-
+		dev_dbg(pcie->dev, "%s: %d\n", __FUNCTION__, __LINE__);
 		return 0;
 	}
 
@@ -2425,9 +2425,9 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
 	val |= APPL_INTR_EN_L1_0_0_RDLH_LINK_UP_INT_EN;
 	appl_writel(pcie, val, APPL_INTR_EN_L1_0_0);
 
-	val = appl_readl(pcie, APPL_INTR_EN_L1_8_0);
-	val |= APPL_INTR_EN_L1_8_EDMA_INT_EN;
-	appl_writel(pcie, val, APPL_INTR_EN_L1_8_0);
+	// val = appl_readl(pcie, APPL_INTR_EN_L1_8_0);
+	// val |= APPL_INTR_EN_L1_8_EDMA_INT_EN;
+	// appl_writel(pcie, val, APPL_INTR_EN_L1_8_0);
 
 	if (pcie->enable_cdm_check) {
 		val = appl_readl(pcie, APPL_INTR_EN_L0_0);
@@ -2955,7 +2955,7 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
 					ret);
 				goto fail;
 			}
-			if (gpiod_get_value(pcie->pex_prsnt_gpiod))
+			// if (gpiod_get_value(pcie->pex_prsnt_gpiod))
 				ret = tegra_pcie_config_rp(pcie);
 		} else {
 			ret = tegra_pcie_config_rp(pcie);

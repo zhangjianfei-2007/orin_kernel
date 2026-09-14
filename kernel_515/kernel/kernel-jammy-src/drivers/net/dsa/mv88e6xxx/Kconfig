@@ -17,3 +17,10 @@ config NET_DSA_MV88E6XXX_PTP
 	help
 	  Say Y to enable PTP hardware timestamping on Marvell 88E6xxx switch
 	  chips that support it.
+
+
+config NET_DSA_MV88E6XXX_SIMPLIFIED_SWI_MGT
+	tristate "simplified switch managment support"
+	depends on NET_DSA_MV88E6XXX
+	help
+	  simplified switch managment support for Marvell 88E6xxx switch chip.

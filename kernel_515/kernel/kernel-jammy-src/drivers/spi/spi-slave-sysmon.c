@@ -35,7 +35,7 @@ struct spi_slave_time_priv {
 	struct completion finished;
 	struct spi_transfer xfer;
 	struct spi_message msg;
-	__be32 buf[2];
+	__u8 buf[10];
 	u8 cmd[8];
 };
 
@@ -78,9 +78,15 @@ static int spi_slave_time_submit(struct spi_slave_time_priv *priv)
 	ts = local_clock();
 	rem_us = do_div(ts, 1000000000) / 1000;
 
-	priv->buf[0] = cpu_to_be32(ts);
-	priv->buf[1] = cpu_to_be32(rem_us);
+	priv->buf[0] = 0x99;
+	priv->buf[1] = 0x81;
 
+	priv->buf[2] = 0x99;
+	priv->buf[4] = 0x81;
+
+
+	priv->buf[6] = 0x99;
+	priv->buf[5] = 0x81;
 	spi_message_init_with_transfers(&priv->msg, &priv->xfer, 1);
 
 	priv->msg.complete = spi_slave_time_complete;
@@ -127,7 +133,7 @@ static int spi_slave_time_remove(struct spi_device *spi)
 
 static struct spi_driver spi_slave_time_driver = {
 	.driver = {
-		.name	= "spi-slave-time",
+		.name	= "spi-slave-sysmon",
 	},
 	.probe		= spi_slave_time_probe,
 	.remove		= spi_slave_time_remove,
