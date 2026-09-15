@@ -1,0 +1,14 @@
+lib/
+lib/modules/
+lib/modules/5.15.185-tegra/
+lib/modules/5.15.185-tegra/updates/
+lib/modules/5.15.185-tegra/updates/opensrc-disp/
+lib/modules/5.15.185-tegra/updates/opensrc-disp/nvidia-drm.ko
+lib/modules/5.15.185-tegra/updates/opensrc-disp/nvidia.ko
+lib/modules/5.15.185-tegra/updates/opensrc-disp/nvidia-modeset.ko
+usr/
+usr/share/
+usr/share/doc/
+usr/share/doc/kernel_display_supplements/
+usr/share/doc/kernel_display_supplements/LICENSE.DisplayDualMIT-GPLv2
+usr/share/doc/kernel_display_supplements/Tegra_Software_License_Agreement-Tegra-Linux.txt
