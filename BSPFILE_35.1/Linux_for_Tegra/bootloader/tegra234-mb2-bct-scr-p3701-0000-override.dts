@@ -43,5 +43,17 @@
             exclusion-info = <2>;
             value = <0x0f000042>;
         };
+
+        reg@4673 { /* CBB_CENTRAL_CBB_FIREWALL_NVCSI_ENGINE_BLF, READ_CTL */
+            exclusion-info = <0>;
+        };
+
+        reg@4674 { /* CBB_CENTRAL_CBB_FIREWALL_NVCSI_ENGINE_BLF, WRITE_CTL */
+            exclusion-info = <0>;
+        };
+
+        reg@4675 { /* CBB_CENTRAL_CBB_FIREWALL_NVCSI_ENGINE_BLF, CTL_SETTING */
+            exclusion-info = <0>;
+        };
     };
 };
