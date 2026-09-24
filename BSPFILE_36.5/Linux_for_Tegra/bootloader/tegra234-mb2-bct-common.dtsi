@@ -1,14 +1,3 @@
-/*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: LicenseRef-NvidiaProprietary
- *
- * NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
- * property and proprietary rights in and to this material, related
- * documentation and any modifications thereto. Any use, reproduction,
- * disclosure or distribution of this material and related documentation
- * without an express license agreement from NVIDIA CORPORATION or
- * its affiliates is strictly prohibited.
- */
 
 / {
     mb2-misc {
@@ -20,19 +9,6 @@
         enable_eks = <1>;
         hwcrc_default_enable = <0>;
         disable_snor_provisioning = <1>;
-        snor_provisioning_dev_only = <0>;
-        enable_hv_load = <0>;
-        enable_pvit = <0>;
-        enable_sc7_dram_auth = <0>;
-        enable_pva_fw = <1>;
-        cpubl_auth_key_delegation_enable = <0>;
-        cpubl_auth_key_pcp_hash = <0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0>;
-        enable_fsi_reset_path = <0>;
-        cpubl_enc_key = <0 0 0 0 0 0 0 0>;
-        fuse_reserved_odm0 = <0>;
-        backup_gpt_offset = <4>;
-        /* 24 indicates the time in seconds after which each expiry happens */
-        ccplex_wdt_period=<24>;
 
         mss_perf {
             mss_pm_disable = <0>;
@@ -43,78 +19,24 @@
             mc_stat_control_emc_gather_override = <0>;
         };
 
+        display {
+            pmc_2sor0_force_internal = <0>;
+            pmc_2sor1_force_internal = <0>;
+            pmc_2sor_vpr_secure_mode = <0>;
+            pmc_2sor_clk_ctrl_owner = <0>;
+            pmc_2disp_pnl_rd_ctrl_owner = <0>;
+            pmc_2disp_pnl_ctrl_owner = <0>;
+            pmc_2disp_dsi_pad_ctrl_owner = <0>;
+        };
+
         eeprom {
             cvm_eeprom_i2c_instance = <0>;
             cvm_eeprom_i2c_slave_address = <0xa0>;
             cvm_eeprom_read_size = <0x100>;
             cvb_eeprom_i2c_instance = <0x0>;
             cvb_eeprom_i2c_slave_address = <0xac>;
-            cvb_eeprom_read_size = <0x100>;
-        };
-
-        fsi_vmon_data {
-           fsi_vmon {
-                fsi_vmon_config@0 { // SKU = INT
-                    sku_info = <0x0>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@1 { // SKU = TA990SA, TE992M
-                    sku_info = <0x90>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@2 { // SKU = TA975SA
-                    sku_info = <0x97>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@3 { // SKU = TE990M
-                    sku_info = <0xD0>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@4 { // SKU = TE980M
-                    sku_info = <0xD3>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@5 { // SKU = TA979SA, TA985SA
-                    sku_info = <0x92>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@6 { // SKU = TE985M
-                    sku_info = <0xD2>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@7 { // SKU = TE970M
-                    sku_info = <0xD4>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@8 { // SKU = TE960M
-                    sku_info = <0xD5>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@9 { // SKU = TE950M
-                    sku_info = <0xD6>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@10 { // SKU = TA983SA
-                    sku_info = <0x94>;
-                    fsi_vmin_threshold = <0x39>;
-                    fsi_vmax_threshold = <0x57>;
-                };
-                fsi_vmon_config@11 { // SKU = TA977SA
-                    sku_info = <0x96>;
-                    fsi_vmin_threshold = <0x35>;
-                    fsi_vmax_threshold = <0x78>;
-                };
-           };
+            /*cvb_eeprom_read_size = <0x100>;*/
+            cvb_eeprom_read_size = <0x0>;
         };
 
         clocks {
@@ -175,7 +97,7 @@
             /* A total of 16 streamids can be provided as streamid-x,
             where x belongs to <0..15>. */
             streamid-0 = <0x16>;
-            streamid-1 = <0x1>;
+            streamid-1 = <0x0>;
             streamid-2 = <0x0>;
             default_carveout_id = <0x0>;
             default_snoop = <0x0>;
@@ -193,7 +115,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
@@ -206,7 +128,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
         };
         /* Configuration fields for SPE AST1. */
@@ -214,7 +136,7 @@
             /* A total of 16 streamids can be provided as streamid-x,
             where x belongs to <0..15>. */
             streamid-0 = <0x16>;
-            streamid-1 = <0x1>;
+            streamid-1 = <0x0>;
             streamid-2 = <0x0>;
             default_carveout_id = <0x0>;
             default_snoop = <0x0>;
@@ -232,7 +154,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 /* Keeping it disabled for SPE DMA, enable if required. */
@@ -246,7 +168,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
         };
         /* Configuration fields for SCE AST0. */
@@ -272,7 +194,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
@@ -285,7 +207,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@2 {
                 /* Keeping it disabled for DRAM ECC error injection carveout, enable if required. */
@@ -299,7 +221,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
         };
         /* Configuration fields for SCE AST1. */
@@ -325,7 +247,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 /* Keeping it disabled for SCE DMA, enable if required. */
@@ -339,7 +261,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@2 {
                 /* Keeping it disabled for DRAM ECC error injection carveout, enable if required. */
@@ -353,7 +275,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
         };
         /* Configuration fields for RCE AST0. */
@@ -378,7 +300,8 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                /* 1MB */
+                size = <0x100000>;
             };
             ast_region@1 {
                 enable = <0x1>;
@@ -392,7 +315,7 @@
                 snoop = <0x0>;
                 pa = <0xffffffff>;
                 /* 8K */
-                size = <0x0>;
+                size = <0x8192>;
             };
             ast_region@2 {
                 enable = <0x1>;
@@ -405,7 +328,8 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                /* 32MB */
+                size = <0x2000000>;
             };
             ast_region@3 {
                 /* Enable if required. */
@@ -420,7 +344,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
         };
         /* Configuration fields for RCE AST1. */
@@ -445,7 +369,8 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                /* 1MB */
+                size = <0x100000>;
             };
             ast_region@1 {
                 enable = <0x1>;
@@ -458,7 +383,8 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                /* 8K */
+                size = <0x8192>;
             };
             ast_region@2 {
                 enable = <0x1>;
@@ -471,7 +397,8 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                /* 32MB */
+                size = <0x2000000>;
             };
             ast_region@3 {
                 /* Enable if required. */
@@ -486,15 +413,16 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
         };
         /* Configuration fields for DCE AST0. */
         auxp_ast_config@6 {
             /* A total of 16 streamids can be provided as streamid-x,
             where x belongs to <0..15>. */
-            streamid-0 = <0x8>;
-            streamid-1 = <0x0>;
+            streamid-0 = <0x7f>;
+            streamid-1 = <0x5>;
+            streamid-2 = <0x0>;
             default_carveout_id = <0x0>;
             default_snoop = <0>;
             matcherrctrl = <0x1>;
@@ -505,47 +433,35 @@
                 /* GSC20 used for DCE FW in DRAM. */
                 carveout = <0x14>;
                 va = <0x00000000 0x40000000>;
-                physical = <0x1>;
+                physical = <0x0>;
                 /* Update this to point to the streamid to be used. */
                 vm_index = <0x0>;
                 aperture_id = <0x0>;
                 snoop = <0x0>;
-                pa = <0xffffffff>;
-                size = <0x0>;
+                pa = <0xde000000>;
+                size = <0x2000000>;
             };
             ast_region@1 {
-                enable = <0x1>;
+                enable = <0x0>;
                 /* GSC11 used for BPMP_DCE_IPC in SysRAM. */
                 carveout = <0xb>;
-                va = <0x00000000 0x82000000>;
-                physical = <0x1>;
+                va = <0x00000000 0x4007a000>;
+                physical = <0x0>;
                 /* Update this to point to the streamid to be used. */
                 vm_index = <0x0>;
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
-            };
-            ast_region@4 {
-                enable = <0x1>;
-                /* GSC42 used for TSEC_DCE carveout in DRAM. */
-                carveout = <0x2A>;
-                va = <0x00000000 0x82300000>;
-                physical = <0x1>;
-                /* Update this to point to the streamid to be used. */
-                vm_index = <0x0>;
-                aperture_id = <0x0>;
-                snoop = <0x0>;
-                pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x2000>;
             };
         };
         /* Configuration fields for DCE AST1. */
         auxp_ast_config@7 {
             /* A total of 16 streamids can be provided as streamid-x,
             where x belongs to <0..15>. */
-            streamid-0 = <0x8>;
-            streamid-1 = <0x0>;
+            streamid-0 = <0x7f>;
+            streamid-1 = <0x5>;
+            streamid-2 = <0x0>;
             default_carveout_id = <0x0>;
             default_snoop = <0>;
             matcherrctrl = <0x1>;
@@ -556,39 +472,26 @@
                 /* GSC20 used for DCE FW in DRAM. */
                 carveout = <0x14>;
                 va = <0x00000000 0x40000000>;
-                physical = <0x1>;
+                physical = <0x0>;
                 /* Update this to point to the streamid to be used. */
                 vm_index = <0x0>;
                 aperture_id = <0x0>;
                 snoop = <0x0>;
-                pa = <0xffffffff>;
-                size = <0x0>;
+                pa = <0xde000000>;
+                size = <0x2000000>;
             };
             ast_region@1 {
-                enable = <0x1>;
+                enable = <0x0>;
                 /* GSC11 used for BPMP_DCE_IPC in SysRAM. */
                 carveout = <0xb>;
-                va = <0x00000000 0x82000000>;
-                physical = <0x1>;
+                va = <0x00000000 0x4007a000>;
+                physical = <0x0>;
                 /* Update this to point to the streamid to be used. */
                 vm_index = <0x0>;
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
-            };
-            ast_region@4 {
-                enable = <0x1>;
-                /* GSC42 used for TSEC_DCE_IPC in DRAM. */
-                carveout = <0x2A>;
-                va = <0x00000000 0x82300000>;
-                physical = <0x1>;
-                /* Update this to point to the streamid to be used. */
-                vm_index = <0x0>;
-                aperture_id = <0x0>;
-                snoop = <0x0>;
-                pa = <0xffffffff>;
-                size = <0x100000>;
+                size = <0x2000>;
             };
         };
         /* Configuration fields for APE ACAST AST. */
@@ -611,12 +514,12 @@
                 vm_index = <0x0>;
                 aperture_id = <0x7>;
                 snoop = <0x0>;
-                pa = <0xffffffff>;
+                pa = <0x0>;
                 size = <0x0>;
             };
             ast_region@1 {
                 /* Enable if required. */
-                enable = <0x0>;
+                enable = <0x1>;
                 /* GSC10 in DRAM. Map APR for ACAST */
                 carveout = <0xa>;
                 /* Update according to APE VA map. */
@@ -626,7 +529,7 @@
                 vm_index = <0x0>;
                 aperture_id = <0xa>;
                 snoop = <0x0>;
-                pa = <0xffffffff>;
+                pa = <0x0>;
                 size = <0x0>;
             };
             ast_region@2 {
@@ -686,7 +589,7 @@
             };
             ast_region@2 {
                 /* Enable if required. */
-                enable = <0x0>;
+                enable = <0x1>;
                 /* Map APR for ADAST */
                 carveout = <0xa>;
                 va = <0x00000004 0xc0000000>;
@@ -695,7 +598,7 @@
                 vm_index = <0x0>;
                 aperture_id = <0xa>;
                 snoop = <0x0>;
-                pa = <0xffffffff>;
+                pa = <0x0>;
                 size = <0x0>;
             };
         };
@@ -722,7 +625,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
@@ -735,21 +638,6 @@
                 snoop = <0x0>;
                 pa = <0xffffffff>;
                 size = <0x431>;
-            };
-            ast_region@2 {
-                enable = <0x1>;
-                /* SW carveout for DRAM ECC error injection */
-                carveout = <0x31>;
-                va = <0x00000000 0x60000000>;
-                /* bypass SMMU */
-                physical = <0x1>;
-                /* use bypass StreamID*/
-                vm_index = <0x0>;
-                aperture_id = <0x0>;
-                snoop = <0x0>;
-                /* pa and size used is as configured by mb2 */
-                pa = <0xffffffff>;
-                size = <0x0>;
             };
         };
         /* Configuration fields for FSI CPU1 AST. */
@@ -775,7 +663,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
@@ -788,21 +676,6 @@
                 snoop = <0x0>;
                 pa = <0xffffffff>;
                 size = <0x431>;
-            };
-            ast_region@2 {
-                enable = <0x1>;
-                /* SW carveout for DRAM ECC error injection */
-                carveout = <0x31>;
-                va = <0x00000000 0x60000000>;
-                /* bypass SMMU */
-                physical = <0x1>;
-                /* use bypass StreamID*/
-                vm_index = <0x0>;
-                aperture_id = <0x0>;
-                snoop = <0x0>;
-                /* pa and size used is as configured by mb2 */
-                pa = <0xffffffff>;
-                size = <0x0>;
             };
         };
         /* Configuration fields for FSI CPU2 AST. */
@@ -828,7 +701,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
@@ -841,21 +714,6 @@
                 snoop = <0x0>;
                 pa = <0xffffffff>;
                 size = <0x431>;
-            };
-            ast_region@2 {
-                enable = <0x1>;
-                /* SW carveout for DRAM ECC error injection */
-                carveout = <0x31>;
-                va = <0x00000000 0x60000000>;
-                /* bypass SMMU */
-                physical = <0x1>;
-                /* use bypass StreamID*/
-                vm_index = <0x0>;
-                aperture_id = <0x0>;
-                snoop = <0x0>;
-                /* pa and size used is as configured by mb2 */
-                pa = <0xffffffff>;
-                size = <0x0>;
             };
         };
         /* Configuration fields for FSI CPU3 AST. */
@@ -881,7 +739,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
@@ -894,21 +752,6 @@
                 snoop = <0x0>;
                 pa = <0xffffffff>;
                 size = <0x431>;
-            };
-            ast_region@2 {
-                enable = <0x1>;
-                /* SW carveout for DRAM ECC error injection */
-                carveout = <0x31>;
-                va = <0x00000000 0x60000000>;
-                /* bypass SMMU */
-                physical = <0x1>;
-                /* use bypass StreamID*/
-                vm_index = <0x0>;
-                aperture_id = <0x0>;
-                snoop = <0x0>;
-                /* pa and size used is as configured by mb2 */
-                pa = <0xffffffff>;
-                size = <0x0>;
             };
         };
         /* Configuration fields for FSI CHSM AST. */
@@ -934,7 +777,7 @@
                 aperture_id = <0x0>;
                 snoop = <0x0>;
                 pa = <0xffffffff>;
-                size = <0x0>;
+                size = <0x431>;
             };
             ast_region@1 {
                 enable = <0x0>;
